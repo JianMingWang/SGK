@@ -12,11 +12,11 @@ namespace SGK.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
-    public partial class SGK_lynnEntities : DbContext
+
+    public partial class SGKEntities : DbContext
     {
-        public SGK_lynnEntities()
-            : base("name=SGK_lynnEntities")
+        public SGKEntities()
+            : base("name=SGKEntities")
         {
         }
     
@@ -30,21 +30,22 @@ namespace SGK.Models
         public virtual DbSet<T_Campus> T_Campus { get; set; }
         public virtual DbSet<T_Dept> T_Dept { get; set; }
         public virtual DbSet<T_Dorm> T_Dorm { get; set; }
+        public virtual DbSet<T_Menu> T_Menu { get; set; }
         public virtual DbSet<T_Region> T_Region { get; set; }
         public virtual DbSet<T_Report> T_Report { get; set; }
         public virtual DbSet<T_Role> T_Role { get; set; }
         public virtual DbSet<T_Student> T_Student { get; set; }
         public virtual DbSet<T_SubReport> T_SubReport { get; set; }
+        public virtual DbSet<T_Person> T_Person { get; set; }
+        public virtual DbSet<T_RoleMenu> T_RoleMenu { get; set; }
         public virtual DbSet<vw_Account> vw_Account { get; set; }
         public virtual DbSet<vw_Building> vw_Building { get; set; }
         public virtual DbSet<vw_Dorm> vw_Dorm { get; set; }
-        public virtual DbSet<vw_Region> vw_Region { get; set; }
-        public virtual DbSet<vw_Student> vw_Student { get; set; }
-        public virtual DbSet<vw_Report> vw_Report { get; set; }
-        public virtual DbSet<vw_SubReport> vw_SubReport { get; set; }
-        public virtual DbSet<T_Menu> T_Menu { get; set; }
         public virtual DbSet<vw_Menu> vw_Menu { get; set; }
-        public virtual DbSet<T_RoleMenu> T_RoleMenu { get; set; }
+        public virtual DbSet<vw_Region> vw_Region { get; set; }
+        public virtual DbSet<vw_Report> vw_Report { get; set; }
         public virtual DbSet<vw_RoleMenu> vw_RoleMenu { get; set; }
+        public virtual DbSet<vw_Student> vw_Student { get; set; }
+        public virtual DbSet<vw_SubReport> vw_SubReport { get; set; }
     }
 }

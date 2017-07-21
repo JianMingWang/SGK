@@ -22,7 +22,6 @@ namespace SGK.Models
         public Nullable<int> ZSFY { get; set; }
         public Nullable<int> CWS { get; set; }
         public Nullable<int> KYCWS { get; set; }
-        public string Sex { get; set; }
         public string DeptID { get; set; }
         public string Remark { get; set; }
         public string Bed_01 { get; set; }
@@ -50,5 +49,7 @@ namespace SGK.Models
         public string Stu_08 { get; set; }
         public string Stu_09 { get; set; }
         public string Stu_10 { get; set; }
+        public string MXXSXB { get; set; }
+        public string MXXSCC { get; set; }
     }
 }

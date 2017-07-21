@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SGK.Controllers;
 
 namespace SGK.Areas.Sys.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: Sys/Account
         public ActionResult Index()
         {

@@ -13,7 +13,6 @@ namespace SGK.Areas.JC.Controllers
 {
     public class DeptController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
 
         #region list
         // GET: JC/Dept

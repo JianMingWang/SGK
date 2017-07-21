@@ -1,4 +1,5 @@
-﻿using SGK.Models;
+﻿using SGK.Controllers;
+using SGK.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Web.Mvc;
 
 namespace SGK.Areas.Sys.Controllers
 {
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: Sys/Role
         public ActionResult Index()
         {

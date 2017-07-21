@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SGKModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="T_Account">
+      <EntityTypeMapping TypeName="SGKModel.T_Account">
+        <MappingFragment StoreEntitySet="T_Account">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Psd" ColumnName="Psd" />
+          <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Building">
+      <EntityTypeMapping TypeName="SGKModel.T_Building">
+        <MappingFragment StoreEntitySet="T_Building">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SZYQ" ColumnName="SZYQ" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Campus">
+      <EntityTypeMapping TypeName="SGKModel.T_Campus">
+        <MappingFragment StoreEntitySet="T_Campus">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Dept">
+      <EntityTypeMapping TypeName="SGKModel.T_Dept">
+        <MappingFragment StoreEntitySet="T_Dept">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Dorm">
+      <EntityTypeMapping TypeName="SGKModel.T_Dorm">
+        <MappingFragment StoreEntitySet="T_Dorm">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="SSLD" ColumnName="SSLD" />
+          <ScalarProperty Name="SSLC" ColumnName="SSLC" />
+          <ScalarProperty Name="FJH" ColumnName="FJH" />
+          <ScalarProperty Name="SSLX" ColumnName="SSLX" />
+          <ScalarProperty Name="ZSFY" ColumnName="ZSFY" />
+          <ScalarProperty Name="CWS" ColumnName="CWS" />
+          <ScalarProperty Name="KYCWS" ColumnName="KYCWS" />
+          <ScalarProperty Name="MXXSXB" ColumnName="MXXSXB" />
+          <ScalarProperty Name="MXXSCC" ColumnName="MXXSCC" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Bed_01" ColumnName="Bed_01" />
+          <ScalarProperty Name="Bed_02" ColumnName="Bed_02" />
+          <ScalarProperty Name="Bed_03" ColumnName="Bed_03" />
+          <ScalarProperty Name="Bed_04" ColumnName="Bed_04" />
+          <ScalarProperty Name="Bed_05" ColumnName="Bed_05" />
+          <ScalarProperty Name="Bed_06" ColumnName="Bed_06" />
+          <ScalarProperty Name="Bed_07" ColumnName="Bed_07" />
+          <ScalarProperty Name="Bed_08" ColumnName="Bed_08" />
+          <ScalarProperty Name="Bed_09" ColumnName="Bed_09" />
+          <ScalarProperty Name="Bed_10" ColumnName="Bed_10" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Menu">
+      <EntityTypeMapping TypeName="SGKModel.T_Menu">
+        <MappingFragment StoreEntitySet="T_Menu">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Region">
+      <EntityTypeMapping TypeName="SGKModel.T_Region">
+        <MappingFragment StoreEntitySet="T_Region">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SZXQ" ColumnName="SZXQ" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Report">
+      <EntityTypeMapping TypeName="SGKModel.T_Report">
+        <MappingFragment StoreEntitySet="T_Report">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+          <ScalarProperty Name="RejectReason" ColumnName="RejectReason" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Role">
+      <EntityTypeMapping TypeName="SGKModel.T_Role">
+        <MappingFragment StoreEntitySet="T_Role">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Student">
+      <EntityTypeMapping TypeName="SGKModel.T_Student">
+        <MappingFragment StoreEntitySet="T_Student">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="Major" ColumnName="Major" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="StuStatus" ColumnName="StuStatus" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DormID" ColumnName="DormID" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_SubReport">
+      <EntityTypeMapping TypeName="SGKModel.T_SubReport">
+        <MappingFragment StoreEntitySet="T_SubReport">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+          <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+          <ScalarProperty Name="OutDormID" ColumnName="OutDormID" />
+          <ScalarProperty Name="InDormID" ColumnName="InDormID" />
+          <ScalarProperty Name="PriceChanged" ColumnName="PriceChanged" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_Person">
+      <EntityTypeMapping TypeName="SGKModel.T_Person">
+        <MappingFragment StoreEntitySet="T_Person">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="PersonType" ColumnName="PersonType" />
+          <ScalarProperty Name="SourceUnit" ColumnName="SourceUnit" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+          <ScalarProperty Name="BedNum" ColumnName="BedNum" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DormID" ColumnName="DormID" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_RoleMenu">
+      <EntityTypeMapping TypeName="SGKModel.T_RoleMenu">
+        <MappingFragment StoreEntitySet="T_RoleMenu">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Account">
+      <EntityTypeMapping TypeName="SGKModel.vw_Account">
+        <MappingFragment StoreEntitySet="vw_Account">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Psd" ColumnName="Psd" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="Dept" ColumnName="Dept" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Building">
+      <EntityTypeMapping TypeName="SGKModel.vw_Building">
+        <MappingFragment StoreEntitySet="vw_Building">
+          <ScalarProperty Name="BuildingID" ColumnName="BuildingID" />
+          <ScalarProperty Name="Building" ColumnName="Building" />
+          <ScalarProperty Name="RegionID" ColumnName="RegionID" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="CampusID" ColumnName="CampusID" />
+          <ScalarProperty Name="Campus" ColumnName="Campus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Dorm">
+      <EntityTypeMapping TypeName="SGKModel.vw_Dorm">
+        <MappingFragment StoreEntitySet="vw_Dorm">
+          <ScalarProperty Name="DormID" ColumnName="DormID" />
+          <ScalarProperty Name="BuildingID" ColumnName="BuildingID" />
+          <ScalarProperty Name="SSLC" ColumnName="SSLC" />
+          <ScalarProperty Name="FJH" ColumnName="FJH" />
+          <ScalarProperty Name="SSLX" ColumnName="SSLX" />
+          <ScalarProperty Name="ZSFY" ColumnName="ZSFY" />
+          <ScalarProperty Name="CWS" ColumnName="CWS" />
+          <ScalarProperty Name="KYCWS" ColumnName="KYCWS" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Bed_01" ColumnName="Bed_01" />
+          <ScalarProperty Name="Bed_02" ColumnName="Bed_02" />
+          <ScalarProperty Name="Bed_03" ColumnName="Bed_03" />
+          <ScalarProperty Name="Bed_04" ColumnName="Bed_04" />
+          <ScalarProperty Name="Bed_05" ColumnName="Bed_05" />
+          <ScalarProperty Name="Bed_06" ColumnName="Bed_06" />
+          <ScalarProperty Name="Bed_07" ColumnName="Bed_07" />
+          <ScalarProperty Name="Bed_08" ColumnName="Bed_08" />
+          <ScalarProperty Name="Bed_09" ColumnName="Bed_09" />
+          <ScalarProperty Name="Bed_10" ColumnName="Bed_10" />
+          <ScalarProperty Name="Building" ColumnName="Building" />
+          <ScalarProperty Name="RegionID" ColumnName="RegionID" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="CampusID" ColumnName="CampusID" />
+          <ScalarProperty Name="Campus" ColumnName="Campus" />
+          <ScalarProperty Name="Stu_01" ColumnName="Stu_01" />
+          <ScalarProperty Name="Stu_02" ColumnName="Stu_02" />
+          <ScalarProperty Name="Stu_03" ColumnName="Stu_03" />
+          <ScalarProperty Name="Stu_04" ColumnName="Stu_04" />
+          <ScalarProperty Name="Stu_05" ColumnName="Stu_05" />
+          <ScalarProperty Name="Stu_06" ColumnName="Stu_06" />
+          <ScalarProperty Name="Stu_07" ColumnName="Stu_07" />
+          <ScalarProperty Name="Stu_08" ColumnName="Stu_08" />
+          <ScalarProperty Name="Stu_09" ColumnName="Stu_09" />
+          <ScalarProperty Name="Stu_10" ColumnName="Stu_10" />
+          <ScalarProperty Name="MXXSXB" ColumnName="MXXSXB" />
+          <ScalarProperty Name="MXXSCC" ColumnName="MXXSCC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Menu">
+      <EntityTypeMapping TypeName="SGKModel.vw_Menu">
+        <MappingFragment StoreEntitySet="vw_Menu">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+          <ScalarProperty Name="Father" ColumnName="Father" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Region">
+      <EntityTypeMapping TypeName="SGKModel.vw_Region">
+        <MappingFragment StoreEntitySet="vw_Region">
+          <ScalarProperty Name="RegionID" ColumnName="RegionID" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="CampusID" ColumnName="CampusID" />
+          <ScalarProperty Name="Campus" ColumnName="Campus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Report">
+      <EntityTypeMapping TypeName="SGKModel.vw_Report">
+        <MappingFragment StoreEntitySet="vw_Report">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Num" ColumnName="Num" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+          <ScalarProperty Name="RejectReason" ColumnName="RejectReason" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AuditName" ColumnName="AuditName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_RoleMenu">
+      <EntityTypeMapping TypeName="SGKModel.vw_RoleMenu">
+        <MappingFragment StoreEntitySet="vw_RoleMenu">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_Student">
+      <EntityTypeMapping TypeName="SGKModel.vw_Student">
+        <MappingFragment StoreEntitySet="vw_Student">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+          <ScalarProperty Name="College" ColumnName="College" />
+          <ScalarProperty Name="Major" ColumnName="Major" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="StuStatus" ColumnName="StuStatus" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DormID" ColumnName="DormID" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Dept" ColumnName="Dept" />
+          <ScalarProperty Name="Campus" ColumnName="Campus" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="Building" ColumnName="Building" />
+          <ScalarProperty Name="FJH" ColumnName="FJH" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_SubReport">
+      <EntityTypeMapping TypeName="SGKModel.vw_SubReport">
+        <MappingFragment StoreEntitySet="vw_SubReport">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+          <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+          <ScalarProperty Name="OutDormID" ColumnName="OutDormID" />
+          <ScalarProperty Name="InDormID" ColumnName="InDormID" />
+          <ScalarProperty Name="PriceChanged" ColumnName="PriceChanged" />
+          <ScalarProperty Name="StuName" ColumnName="StuName" />
+          <ScalarProperty Name="OutCampus" ColumnName="OutCampus" />
+          <ScalarProperty Name="OutRegion" ColumnName="OutRegion" />
+          <ScalarProperty Name="OutBuilding" ColumnName="OutBuilding" />
+          <ScalarProperty Name="OutFJH" ColumnName="OutFJH" />
+          <ScalarProperty Name="InCampus" ColumnName="InCampus" />
+          <ScalarProperty Name="InRegion" ColumnName="InRegion" />
+          <ScalarProperty Name="InBuilding" ColumnName="InBuilding" />
+          <ScalarProperty Name="InFJH" ColumnName="InFJH" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

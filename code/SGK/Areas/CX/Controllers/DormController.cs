@@ -8,13 +8,12 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SGK.Controllers;
 
 namespace SGK.Areas.CX.Controllers
 {
-    public class DormController : Controller
+    public class DormController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: CX/Dorm
         public ActionResult Index()
         {

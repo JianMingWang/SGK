@@ -4,13 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SGK_lynnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SGKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="T_Account">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="Psd" Type="varchar" MaxLength="64" />
+          <Property Name="LoginTime" Type="datetime" />
           <Property Name="Name" Type="varchar" MaxLength="64" />
           <Property Name="Tel" Type="varchar" MaxLength="64" />
           <Property Name="DeptID" Type="varchar" MaxLength="64" />
@@ -50,7 +51,8 @@
           <Property Name="ZSFY" Type="int" />
           <Property Name="CWS" Type="int" />
           <Property Name="KYCWS" Type="int" />
-          <Property Name="Sex" Type="char" MaxLength="1" />
+          <Property Name="MXXSXB" Type="char" MaxLength="1" />
+          <Property Name="MXXSCC" Type="char" MaxLength="1" />
           <Property Name="DeptID" Type="varchar" MaxLength="128" />
           <Property Name="Remark" Type="varchar" MaxLength="1024" />
           <Property Name="Bed_01" Type="varchar" MaxLength="64" />
@@ -72,6 +74,25 @@
           <Property Name="Name" Type="varchar" MaxLength="64" />
           <Property Name="Url" Type="varchar" MaxLength="64" />
           <Property Name="FatherID" Type="varchar" MaxLength="64" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“SGK.dbo.T_Person”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="T_Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="64" />
+          <Property Name="Sex" Type="char" MaxLength="1" />
+          <Property Name="PersonType" Type="char" MaxLength="1" />
+          <Property Name="SourceUnit" Type="varchar" MaxLength="64" />
+          <Property Name="Tel" Type="varchar" MaxLength="64" />
+          <Property Name="College" Type="varchar" MaxLength="64" />
+          <Property Name="DeptName" Type="varchar" MaxLength="64" />
+          <Property Name="BedNum" Type="int" />
+          <Property Name="Status" Type="char" MaxLength="1" />
+          <Property Name="DormID" Type="varchar" MaxLength="64" />
+          <Property Name="Remarks" Type="varchar" MaxLength="1024" />
         </EntityType>
         <EntityType Name="T_Region">
           <Key>
@@ -104,7 +125,7 @@
           <Property Name="Name" Type="nchar" MaxLength="10" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.T_RoleMenu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.T_RoleMenu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="T_RoleMenu">
           <Key>
             <PropertyRef Name="RoleID" />
@@ -144,7 +165,7 @@
           <Property Name="PriceChanged" Type="char" MaxLength="1" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Account”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Account”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Account">
           <Key>
             <PropertyRef Name="ID" />
@@ -159,7 +180,7 @@
           <Property Name="Role" Type="nchar" MaxLength="10" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Building”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Building”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Building">
           <Key>
             <PropertyRef Name="BuildingID" />
@@ -172,7 +193,7 @@
           <Property Name="Campus" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Dorm”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Dorm”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Dorm">
           <Key>
             <PropertyRef Name="DormID" />
@@ -185,7 +206,6 @@
           <Property Name="ZSFY" Type="int" />
           <Property Name="CWS" Type="int" />
           <Property Name="KYCWS" Type="int" />
-          <Property Name="Sex" Type="char" MaxLength="1" />
           <Property Name="DeptID" Type="varchar" MaxLength="128" />
           <Property Name="Remark" Type="varchar" MaxLength="1024" />
           <Property Name="Bed_01" Type="varchar" MaxLength="64" />
@@ -213,9 +233,11 @@
           <Property Name="Stu_08" Type="varchar" MaxLength="64" />
           <Property Name="Stu_09" Type="varchar" MaxLength="64" />
           <Property Name="Stu_10" Type="varchar" MaxLength="64" />
+          <Property Name="MXXSXB" Type="char" MaxLength="1" />
+          <Property Name="MXXSCC" Type="char" MaxLength="1" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Menu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Menu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Menu">
           <Key>
             <PropertyRef Name="ID" />
@@ -227,7 +249,7 @@
           <Property Name="Father" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Region”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Region”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Region">
           <Key>
             <PropertyRef Name="RegionID" />
@@ -238,7 +260,7 @@
           <Property Name="Campus" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Report”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Report”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Report">
           <Key>
             <PropertyRef Name="ID" />
@@ -257,7 +279,7 @@
           <Property Name="AuditName" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_RoleMenu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_RoleMenu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_RoleMenu">
           <Key>
             <PropertyRef Name="RoleID" />
@@ -270,7 +292,7 @@
           <Property Name="FatherID" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_Student”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_Student”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_Student">
           <Key>
             <PropertyRef Name="ID" />
@@ -296,7 +318,7 @@
           <Property Name="FJH" Type="varchar" MaxLength="64" />
         </EntityType>
         <!--生成过程中发现错误:
-警告 6002: 表/视图“SGK_lynn.dbo.vw_SubReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+警告 6002: 表/视图“SGK.dbo.vw_SubReport”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="vw_SubReport">
           <Key>
             <PropertyRef Name="ID" />
@@ -317,7 +339,7 @@
           <Property Name="InBuilding" Type="varchar" MaxLength="64" />
           <Property Name="InFJH" Type="varchar" MaxLength="64" />
         </EntityType>
-        <EntityContainer Name="SGK_lynnModelStoreContainer">
+        <EntityContainer Name="SGKModelStoreContainer">
           <EntitySet Name="T_Account" EntityType="Self.T_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_Building" EntityType="Self.T_Building" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_Campus" EntityType="Self.T_Campus" Schema="dbo" store:Type="Tables" />
@@ -329,6 +351,22 @@
           <EntitySet Name="T_Role" EntityType="Self.T_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_Student" EntityType="Self.T_Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_SubReport" EntityType="Self.T_SubReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Person" EntityType="Self.T_Person" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [T_Person].[ID] AS [ID], 
+    [T_Person].[Name] AS [Name], 
+    [T_Person].[Sex] AS [Sex], 
+    [T_Person].[PersonType] AS [PersonType], 
+    [T_Person].[SourceUnit] AS [SourceUnit], 
+    [T_Person].[Tel] AS [Tel], 
+    [T_Person].[College] AS [College], 
+    [T_Person].[DeptName] AS [DeptName], 
+    [T_Person].[BedNum] AS [BedNum], 
+    [T_Person].[Status] AS [Status], 
+    [T_Person].[DormID] AS [DormID], 
+    [T_Person].[Remarks] AS [Remarks]
+    FROM [dbo].[T_Person] AS [T_Person]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="T_RoleMenu" EntityType="Self.T_RoleMenu" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [T_RoleMenu].[RoleID] AS [RoleID], 
@@ -367,7 +405,6 @@
     [vw_Dorm].[ZSFY] AS [ZSFY], 
     [vw_Dorm].[CWS] AS [CWS], 
     [vw_Dorm].[KYCWS] AS [KYCWS], 
-    [vw_Dorm].[Sex] AS [Sex], 
     [vw_Dorm].[DeptID] AS [DeptID], 
     [vw_Dorm].[Remark] AS [Remark], 
     [vw_Dorm].[Bed_01] AS [Bed_01], 
@@ -394,7 +431,9 @@
     [vw_Dorm].[Stu_07] AS [Stu_07], 
     [vw_Dorm].[Stu_08] AS [Stu_08], 
     [vw_Dorm].[Stu_09] AS [Stu_09], 
-    [vw_Dorm].[Stu_10] AS [Stu_10]
+    [vw_Dorm].[Stu_10] AS [Stu_10], 
+    [vw_Dorm].[MXXSXB] AS [MXXSXB], 
+    [vw_Dorm].[MXXSCC] AS [MXXSCC]
     FROM [dbo].[vw_Dorm] AS [vw_Dorm]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vw_Menu" EntityType="Self.vw_Menu" store:Type="Views" store:Schema="dbo">
@@ -482,16 +521,18 @@
     FROM [dbo].[vw_SubReport] AS [vw_SubReport]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="SGK_lynnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="SGKModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="T_Account">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Psd" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="LoginTime" Type="DateTime" Precision="3" />
           <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Tel" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="DeptID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
@@ -531,7 +572,8 @@
           <Property Name="ZSFY" Type="Int32" />
           <Property Name="CWS" Type="Int32" />
           <Property Name="KYCWS" Type="Int32" />
-          <Property Name="Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="MXXSXB" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="MXXSCC" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DeptID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="Remark" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
           <Property Name="Bed_01" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
@@ -544,6 +586,15 @@
           <Property Name="Bed_08" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Bed_09" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Bed_10" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="T_Menu">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="T_Region">
           <Key>
@@ -605,6 +656,31 @@
           <Property Name="InDormID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PriceChanged" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
+        <EntityType Name="T_Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="PersonType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="SourceUnit" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Tel" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="College" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="DeptName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="BedNum" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DormID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="T_RoleMenu">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="RoleID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MenuID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="vw_Account">
           <Key>
             <PropertyRef Name="ID" />
@@ -641,7 +717,6 @@
           <Property Name="ZSFY" Type="Int32" />
           <Property Name="CWS" Type="Int32" />
           <Property Name="KYCWS" Type="Int32" />
-          <Property Name="Sex" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="DeptID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="Remark" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
           <Property Name="Bed_01" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
@@ -669,6 +744,18 @@
           <Property Name="Stu_08" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Stu_09" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Stu_10" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="MXXSXB" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="MXXSCC" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vw_Menu">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Father" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_Region">
           <Key>
@@ -678,6 +765,34 @@
           <Property Name="Region" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="CampusID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Campus" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vw_Report">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AccountID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Time" Type="DateTime" Precision="3" />
+          <Property Name="Num" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="AuditID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="RejectReason" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Remark" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="AuditName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vw_RoleMenu">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="RoleID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MenuID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_Student">
           <Key>
@@ -703,51 +818,11 @@
           <Property Name="Building" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="FJH" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="SGK_lynnEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="T_Account" EntityType="Self.T_Account" />
-          <EntitySet Name="T_Building" EntityType="Self.T_Building" />
-          <EntitySet Name="T_Campus" EntityType="Self.T_Campus" />
-          <EntitySet Name="T_Dept" EntityType="Self.T_Dept" />
-          <EntitySet Name="T_Dorm" EntityType="Self.T_Dorm" />
-          <EntitySet Name="T_Region" EntityType="Self.T_Region" />
-          <EntitySet Name="T_Report" EntityType="Self.T_Report" />
-          <EntitySet Name="T_Role" EntityType="Self.T_Role" />
-          <EntitySet Name="T_Student" EntityType="Self.T_Student" />
-          <EntitySet Name="T_SubReport" EntityType="Self.T_SubReport" />
-          <EntitySet Name="vw_Account" EntityType="Self.vw_Account" />
-          <EntitySet Name="vw_Building" EntityType="Self.vw_Building" />
-          <EntitySet Name="vw_Dorm" EntityType="Self.vw_Dorm" />
-          <EntitySet Name="vw_Region" EntityType="Self.vw_Region" />
-          <EntitySet Name="vw_Student" EntityType="Self.vw_Student" />
-          <EntitySet Name="vw_Report" EntityType="SGK_lynnModel.vw_Report" />
-          <EntitySet Name="vw_SubReport" EntityType="SGK_lynnModel.vw_SubReport" />
-          <EntitySet Name="T_Menu" EntityType="SGK_lynnModel.T_Menu" />
-          <EntitySet Name="vw_Menu" EntityType="SGK_lynnModel.vw_Menu" />
-          <EntitySet Name="T_RoleMenu" EntityType="SGK_lynnModel.T_RoleMenu" />
-          <EntitySet Name="vw_RoleMenu" EntityType="SGK_lynnModel.vw_RoleMenu" />
-        </EntityContainer>
-        <EntityType Name="vw_Report">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="AccountID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Time" Type="DateTime" Precision="3" />
-          <Property Name="Num" Type="Int32" />
-          <Property Name="Reason" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
-          <Property Name="AuditID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="RejectReason" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Remark" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="AuditName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="vw_SubReport">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ReportID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="StudentID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="OutDormID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
@@ -763,55 +838,42 @@
           <Property Name="InBuilding" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="InFJH" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="T_Menu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vw_Menu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Father" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="T_RoleMenu">
-          <Key>
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="MenuID" />
-          </Key>
-          <Property Name="RoleID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="MenuID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vw_RoleMenu">
-          <Key>
-            <PropertyRef Name="RoleID" />
-            <PropertyRef Name="MenuID" />
-          </Key>
-          <Property Name="RoleID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="MenuID" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-          <Property Name="FatherID" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
-        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="T_Account" EntityType="Self.T_Account" />
+          <EntitySet Name="T_Building" EntityType="Self.T_Building" />
+          <EntitySet Name="T_Campus" EntityType="Self.T_Campus" />
+          <EntitySet Name="T_Dept" EntityType="Self.T_Dept" />
+          <EntitySet Name="T_Dorm" EntityType="Self.T_Dorm" />
+          <EntitySet Name="T_Menu" EntityType="Self.T_Menu" />
+          <EntitySet Name="T_Region" EntityType="Self.T_Region" />
+          <EntitySet Name="T_Report" EntityType="Self.T_Report" />
+          <EntitySet Name="T_Role" EntityType="Self.T_Role" />
+          <EntitySet Name="T_Student" EntityType="Self.T_Student" />
+          <EntitySet Name="T_SubReport" EntityType="Self.T_SubReport" />
+          <EntitySet Name="T_Person" EntityType="Self.T_Person" />
+          <EntitySet Name="T_RoleMenu" EntityType="Self.T_RoleMenu" />
+          <EntitySet Name="vw_Account" EntityType="Self.vw_Account" />
+          <EntitySet Name="vw_Building" EntityType="Self.vw_Building" />
+          <EntitySet Name="vw_Dorm" EntityType="Self.vw_Dorm" />
+          <EntitySet Name="vw_Menu" EntityType="Self.vw_Menu" />
+          <EntitySet Name="vw_Region" EntityType="Self.vw_Region" />
+          <EntitySet Name="vw_Report" EntityType="Self.vw_Report" />
+          <EntitySet Name="vw_RoleMenu" EntityType="Self.vw_RoleMenu" />
+          <EntitySet Name="vw_Student" EntityType="Self.vw_Student" />
+          <EntitySet Name="vw_SubReport" EntityType="Self.vw_SubReport" />
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SGK_lynnModelStoreContainer" CdmEntityContainer="SGK_lynnEntities">
+        <EntityContainerMapping StorageEntityContainer="SGKModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="T_Account">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Account">
+            <EntityTypeMapping TypeName="SGKModel.T_Account">
               <MappingFragment StoreEntitySet="T_Account">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Psd" ColumnName="Psd" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="DeptID" ColumnName="DeptID" />
@@ -820,7 +882,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Building">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Building">
+            <EntityTypeMapping TypeName="SGKModel.T_Building">
               <MappingFragment StoreEntitySet="T_Building">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -829,7 +891,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Campus">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Campus">
+            <EntityTypeMapping TypeName="SGKModel.T_Campus">
               <MappingFragment StoreEntitySet="T_Campus">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -837,7 +899,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Dept">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Dept">
+            <EntityTypeMapping TypeName="SGKModel.T_Dept">
               <MappingFragment StoreEntitySet="T_Dept">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -845,7 +907,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Dorm">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Dorm">
+            <EntityTypeMapping TypeName="SGKModel.T_Dorm">
               <MappingFragment StoreEntitySet="T_Dorm">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="SSLD" ColumnName="SSLD" />
@@ -855,7 +917,8 @@
                 <ScalarProperty Name="ZSFY" ColumnName="ZSFY" />
                 <ScalarProperty Name="CWS" ColumnName="CWS" />
                 <ScalarProperty Name="KYCWS" ColumnName="KYCWS" />
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="MXXSXB" ColumnName="MXXSXB" />
+                <ScalarProperty Name="MXXSCC" ColumnName="MXXSCC" />
                 <ScalarProperty Name="DeptID" ColumnName="DeptID" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Bed_01" ColumnName="Bed_01" />
@@ -871,8 +934,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="T_Menu">
+            <EntityTypeMapping TypeName="SGKModel.T_Menu">
+              <MappingFragment StoreEntitySet="T_Menu">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="T_Region">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Region">
+            <EntityTypeMapping TypeName="SGKModel.T_Region">
               <MappingFragment StoreEntitySet="T_Region">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -881,7 +954,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Report">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Report">
+            <EntityTypeMapping TypeName="SGKModel.T_Report">
               <MappingFragment StoreEntitySet="T_Report">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
@@ -897,7 +970,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Role">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Role">
+            <EntityTypeMapping TypeName="SGKModel.T_Role">
               <MappingFragment StoreEntitySet="T_Role">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -905,7 +978,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Student">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Student">
+            <EntityTypeMapping TypeName="SGKModel.T_Student">
               <MappingFragment StoreEntitySet="T_Student">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -925,7 +998,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_SubReport">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_SubReport">
+            <EntityTypeMapping TypeName="SGKModel.T_SubReport">
               <MappingFragment StoreEntitySet="T_SubReport">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
@@ -936,8 +1009,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="T_Person">
+            <EntityTypeMapping TypeName="SGKModel.T_Person">
+              <MappingFragment StoreEntitySet="T_Person">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PersonType" ColumnName="PersonType" />
+                <ScalarProperty Name="SourceUnit" ColumnName="SourceUnit" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="College" ColumnName="College" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+                <ScalarProperty Name="BedNum" ColumnName="BedNum" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DormID" ColumnName="DormID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_RoleMenu">
+            <EntityTypeMapping TypeName="SGKModel.T_RoleMenu">
+              <MappingFragment StoreEntitySet="T_RoleMenu">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="vw_Account">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Account">
+            <EntityTypeMapping TypeName="SGKModel.vw_Account">
               <MappingFragment StoreEntitySet="vw_Account">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Psd" ColumnName="Psd" />
@@ -951,7 +1050,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="vw_Building">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Building">
+            <EntityTypeMapping TypeName="SGKModel.vw_Building">
               <MappingFragment StoreEntitySet="vw_Building">
                 <ScalarProperty Name="BuildingID" ColumnName="BuildingID" />
                 <ScalarProperty Name="Building" ColumnName="Building" />
@@ -963,7 +1062,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="vw_Dorm">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Dorm">
+            <EntityTypeMapping TypeName="SGKModel.vw_Dorm">
               <MappingFragment StoreEntitySet="vw_Dorm">
                 <ScalarProperty Name="DormID" ColumnName="DormID" />
                 <ScalarProperty Name="BuildingID" ColumnName="BuildingID" />
@@ -973,7 +1072,6 @@
                 <ScalarProperty Name="ZSFY" ColumnName="ZSFY" />
                 <ScalarProperty Name="CWS" ColumnName="CWS" />
                 <ScalarProperty Name="KYCWS" ColumnName="KYCWS" />
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
                 <ScalarProperty Name="DeptID" ColumnName="DeptID" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Bed_01" ColumnName="Bed_01" />
@@ -1001,11 +1099,24 @@
                 <ScalarProperty Name="Stu_08" ColumnName="Stu_08" />
                 <ScalarProperty Name="Stu_09" ColumnName="Stu_09" />
                 <ScalarProperty Name="Stu_10" ColumnName="Stu_10" />
+                <ScalarProperty Name="MXXSXB" ColumnName="MXXSXB" />
+                <ScalarProperty Name="MXXSCC" ColumnName="MXXSCC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_Menu">
+            <EntityTypeMapping TypeName="SGKModel.vw_Menu">
+              <MappingFragment StoreEntitySet="vw_Menu">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+                <ScalarProperty Name="Father" ColumnName="Father" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="vw_Region">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Region">
+            <EntityTypeMapping TypeName="SGKModel.vw_Region">
               <MappingFragment StoreEntitySet="vw_Region">
                 <ScalarProperty Name="RegionID" ColumnName="RegionID" />
                 <ScalarProperty Name="Region" ColumnName="Region" />
@@ -1014,13 +1125,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="vw_Report">
+            <EntityTypeMapping TypeName="SGKModel.vw_Report">
+              <MappingFragment StoreEntitySet="vw_Report">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+                <ScalarProperty Name="RejectReason" ColumnName="RejectReason" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AuditName" ColumnName="AuditName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_RoleMenu">
+            <EntityTypeMapping TypeName="SGKModel.vw_RoleMenu">
+              <MappingFragment StoreEntitySet="vw_RoleMenu">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="vw_Student">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Student">
+            <EntityTypeMapping TypeName="SGKModel.vw_Student">
               <MappingFragment StoreEntitySet="vw_Student">
-                <ScalarProperty Name="FJH" ColumnName="FJH" />
-                <ScalarProperty Name="Building" ColumnName="Building" />
-                <ScalarProperty Name="Region" ColumnName="Region" />
-                <ScalarProperty Name="Campus" ColumnName="Campus" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ClassName" ColumnName="ClassName" />
@@ -1036,85 +1172,31 @@
                 <ScalarProperty Name="DormID" ColumnName="DormID" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Dept" ColumnName="Dept" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vw_Report">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Report">
-              <MappingFragment StoreEntitySet="vw_Report">
-                <ScalarProperty Name="AuditName" ColumnName="AuditName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="RejectReason" ColumnName="RejectReason" />
-                <ScalarProperty Name="AuditID" ColumnName="AuditID" />
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-                <ScalarProperty Name="Num" ColumnName="Num" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Campus" ColumnName="Campus" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="Building" ColumnName="Building" />
+                <ScalarProperty Name="FJH" ColumnName="FJH" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="vw_SubReport">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_SubReport">
+            <EntityTypeMapping TypeName="SGKModel.vw_SubReport">
               <MappingFragment StoreEntitySet="vw_SubReport">
-                <ScalarProperty Name="InFJH" ColumnName="InFJH" />
-                <ScalarProperty Name="InBuilding" ColumnName="InBuilding" />
-                <ScalarProperty Name="InRegion" ColumnName="InRegion" />
-                <ScalarProperty Name="InCampus" ColumnName="InCampus" />
-                <ScalarProperty Name="OutFJH" ColumnName="OutFJH" />
-                <ScalarProperty Name="OutBuilding" ColumnName="OutBuilding" />
-                <ScalarProperty Name="OutRegion" ColumnName="OutRegion" />
-                <ScalarProperty Name="OutCampus" ColumnName="OutCampus" />
-                <ScalarProperty Name="StuName" ColumnName="StuName" />
-                <ScalarProperty Name="PriceChanged" ColumnName="PriceChanged" />
-                <ScalarProperty Name="InDormID" ColumnName="InDormID" />
-                <ScalarProperty Name="OutDormID" ColumnName="OutDormID" />
-                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="T_Menu">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_Menu">
-              <MappingFragment StoreEntitySet="T_Menu">
-                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vw_Menu">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_Menu">
-              <MappingFragment StoreEntitySet="vw_Menu">
-                <ScalarProperty Name="Father" ColumnName="Father" />
-                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="T_RoleMenu">
-            <EntityTypeMapping TypeName="SGK_lynnModel.T_RoleMenu">
-              <MappingFragment StoreEntitySet="T_RoleMenu">
-                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vw_RoleMenu">
-            <EntityTypeMapping TypeName="SGK_lynnModel.vw_RoleMenu">
-              <MappingFragment StoreEntitySet="vw_RoleMenu">
-                <ScalarProperty Name="FatherID" ColumnName="FatherID" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="OutDormID" ColumnName="OutDormID" />
+                <ScalarProperty Name="InDormID" ColumnName="InDormID" />
+                <ScalarProperty Name="PriceChanged" ColumnName="PriceChanged" />
+                <ScalarProperty Name="StuName" ColumnName="StuName" />
+                <ScalarProperty Name="OutCampus" ColumnName="OutCampus" />
+                <ScalarProperty Name="OutRegion" ColumnName="OutRegion" />
+                <ScalarProperty Name="OutBuilding" ColumnName="OutBuilding" />
+                <ScalarProperty Name="OutFJH" ColumnName="OutFJH" />
+                <ScalarProperty Name="InCampus" ColumnName="InCampus" />
+                <ScalarProperty Name="InRegion" ColumnName="InRegion" />
+                <ScalarProperty Name="InBuilding" ColumnName="InBuilding" />
+                <ScalarProperty Name="InFJH" ColumnName="InFJH" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

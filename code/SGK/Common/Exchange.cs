@@ -207,5 +207,30 @@ namespace SGK.Common
             }
             return type;
         }
+
+        /// <summary>
+        /// 转换面向学生层次
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public static string NoToMXXSCC(string no)
+        {
+            string type = "";
+            switch (no)
+            {
+                case "0":
+                    type = "本科生";
+                    break;
+                case "1":
+                    type = "";
+                    break;
+                case "2":
+                    type = "";
+                    break;
+                default:
+                    break;
+            }
+            return type;
+        }
     }
 }

@@ -12,14 +12,19 @@ namespace SGK.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class T_Account
+    public partial class T_Person
     {
         public string ID { get; set; }
-        public string Psd { get; set; }
-        public Nullable<System.DateTime> LoginTime { get; set; }
         public string Name { get; set; }
+        public string Sex { get; set; }
+        public string PersonType { get; set; }
+        public string SourceUnit { get; set; }
         public string Tel { get; set; }
-        public string DeptID { get; set; }
-        public string RoleID { get; set; }
+        public string College { get; set; }
+        public string DeptName { get; set; }
+        public Nullable<int> BedNum { get; set; }
+        public string Status { get; set; }
+        public string DormID { get; set; }
+        public string Remarks { get; set; }
     }
 }

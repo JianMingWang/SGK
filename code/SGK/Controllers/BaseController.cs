@@ -4,11 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FineUIMvc;
+using SGK.Models;
 
 namespace SGK.Controllers
 {
     public class BaseController : Controller
     {
+        public SGKEntities db = new SGKEntities();
+
         /// <summary>
         /// 显示通知对话框
         /// </summary>

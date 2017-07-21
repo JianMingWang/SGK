@@ -10,15 +10,13 @@ namespace SGK.Controllers
 {
     public class HomeController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         public ActionResult Index()
         {
-            if (Session["AccountID"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            BindDate_Tree(Session["RoleID"].ToString());
+            //if (Session["AccountID"] == null)
+            //{
+            //    return RedirectToAction("Login", "Home");
+            //}
+            //BindDate_Tree(Session["RoleID"].ToString());
             return View();
         }
 
@@ -42,6 +40,7 @@ namespace SGK.Controllers
             ViewBag.treeMenu = nodes.ToArray();
 
         }
+
         public void BindDate_SubTree(IQueryable<vw_RoleMenu> menu, string fatherid, TreeNode treeNode)
         {
             var list = from m in menu where m.FatherID == fatherid select m;
@@ -71,8 +70,6 @@ namespace SGK.Controllers
 
             return UIHelper.Result();
         }
-
-
 
         public ActionResult Login()
         {

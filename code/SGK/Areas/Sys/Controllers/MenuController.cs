@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SGK.Controllers;
 
 namespace SGK.Areas.Sys.Controllers
 {
-    public class MenuController : Controller
+    public class MenuController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: Sys/Menu
         public ActionResult Index()
         {

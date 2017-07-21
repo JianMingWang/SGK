@@ -11,8 +11,6 @@ namespace SGK.Areas.UserInfo.Controllers
 {
     public class PsdController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: UserInfo/Psd
         public ActionResult Index()
         {

@@ -20,10 +20,8 @@ namespace SGK.Areas.TB.Controllers
         public string text { get; set; }
     }
 
-    public class ReportController : Controller
+    public class ReportController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: TB/Report
         public ActionResult Index()
         {

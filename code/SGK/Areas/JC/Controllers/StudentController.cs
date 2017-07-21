@@ -13,8 +13,6 @@ namespace SGK.Areas.JC.Controllers
 {
     public class StudentController : BaseController
     {
-        private SGK_lynnEntities db = new SGK_lynnEntities();
-
         // GET: JC/Student
         public ActionResult Index()
         {
