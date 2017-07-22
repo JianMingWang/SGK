@@ -191,6 +191,7 @@
     <Compile Include="Areas\JC\Controllers\DormController.cs" />
     <Compile Include="Areas\JC\Controllers\StudentController.cs" />
     <Compile Include="Areas\JC\JCAreaRegistration.cs" />
+    <Compile Include="Areas\JC\Models\Models.cs" />
     <Compile Include="Areas\Sys\Controllers\AccountController.cs" />
     <Compile Include="Areas\Sys\Controllers\MenuController.cs" />
     <Compile Include="Areas\Sys\Controllers\RoleController.cs" />
@@ -392,6 +393,7 @@
       <DependentUpon>SGK.edmx</DependentUpon>
       <LastGenOutput>SGK.cs</LastGenOutput>
     </Content>
+    <Content Include="Areas\JC\Views\Dorm\Modify.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -417,7 +419,6 @@
     <Folder Include="Areas\CX\Models\" />
     <Folder Include="Areas\CX\Views\Shared\" />
     <Folder Include="Areas\JC\Import\" />
-    <Folder Include="Areas\JC\Models\" />
     <Folder Include="Areas\JC\Views\Shared\" />
     <Folder Include="Areas\Sys\Models\" />
     <Folder Include="Areas\Sys\Views\Shared\" />

@@ -18,7 +18,7 @@ namespace SGK.Common
             switch (no)
             {
                 case "0":
-                    type = "学生宿舍";
+                    type = "普通住宿";
                     break;
                 case "1":
                     type = "非住宿用房";
@@ -222,10 +222,10 @@ namespace SGK.Common
                     type = "本科生";
                     break;
                 case "1":
-                    type = "";
+                    type = "研究生";
                     break;
                 case "2":
-                    type = "";
+                    type = "博士生";
                     break;
                 default:
                     break;

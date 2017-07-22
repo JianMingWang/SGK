@@ -1,47 +1,80 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "宿舍资源管理";
     var F = Html.F();
 }
 
 @section script{
     <script>
 
-        function lofInfo(data) {
-            console.log(data);
+    function lofInfo(data) {
+        console.log(data);
+    }
+
+    //下载模板
+    function btnDownload() {
+        window.location.href = '@Url.Action("DownloadEmptyDormitory")';
+    }
+
+    //条件搜索
+    function btnSerchClick() {
+        var FJH = F.ui.txbRoomNum.getText();
+        var SSYQ = F.ui.ddlSSYQ.getValue();
+        var SSLD = F.ui.ddlSSLD.getValue();
+        var data = [];
+        data.push({ "1": "one" });
+        data.push({ "2": "two" });
+        data.push({ "3": "three" });
+
+        F.doPostBack('@Url.Action("btnSearchClick")', {
+            FJH: FJH,
+            SSYQ: SSYQ,
+            SSLD: SSLD,
+            data: data
+        });
+    }
+
+    //重置搜索条件
+    function btnResetClick() {
+        console.log(F.ui.txbRoomNum.getText());
+        F.ui.txbRoomNum.reset();
+        F.ui.ddlSSYQ.reset();
+        F.ui.ddlSSLD.reset();
+        F.doPostBack('@Url.Action("btnReset")');
         }
 
-        //下载模板
-        function btnDownload() {
-            window.location.href = '@Url.Action("DownloadEmptyDormitory")';
+        function renderActionModify() {
+            return '<a href="javascript:;" class="mywindowfield"><i class="ui-icon f-icon-edit f-grid-cell-iconfont"></i></a>';
         }
 
-        //条件搜索
-        function btnSerchClick() {
-            var FJH = F.ui.txbRoomNum.getText();
-            var SSYQ = F.ui.ddlSSYQ.getValue();
-            var SSLD = F.ui.ddlSSLD.getValue();
-            var data = [];
-            data.push({ "1": "one" });
-            data.push({ "2": "two" });
-            data.push({ "3": "three" });
+        function openWindow(rowData) {
+            // 
+            var id = rowData.id;
+            var text = rowData.values.Region + "-" + rowData.values.FJH;
 
-            F.doPostBack('@Url.Action("btnSearchClick")', {
-                FJH: FJH,
-                SSYQ: SSYQ,
-                SSLD: SSLD,
-                data: data
+            var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Modify")';
+            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+            // 显示窗体
+            F.ui.window1.show(iframeUrl, '编辑宿舍信息 - ' + text);
+        }
+
+        F.ready(function () {
+
+            var grid = F.ui.gridDorm;
+            // 点击表格行中的编辑按钮
+            grid.el.on('click', 'a.mywindowfield', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+                openWindow(rowData);
             });
-        }
 
-        //重置搜索条件
-        function btnResetClick() {
-            console.log(F.ui.txbRoomNum.getText());
-            F.ui.txbRoomNum.reset();
-            F.ui.ddlSSYQ.reset();
-            F.ui.ddlSSLD.reset();
-            F.doPostBack('@Url.Action("btnReset")');
-        }
+            // 点击表格行中的删除按钮
+            //grid.el.on('click', 'a.deletefield', function (event) {
+            //    F.alert('尚未实现！');
+            //});
+
+        });
     </script>
 }
 
@@ -73,8 +106,8 @@
                         .EnableCheckBoxSelect(true)
                         .AllowPaging(true)
                         .PageSize(20)
-                        .DataIDField("ID")
-                        .DataTextField("Name")
+                        .DataIDField("DormID")
+                        //.DataTextField("Name")
                         .Toolbars(
                             F.Toolbar()
                                 .ID("")
@@ -155,21 +188,26 @@
                             F.RowNumberField()
                                 .TextAlign(TextAlign.Center),
                             F.RenderField()
+                                .HeaderText("编辑")
+                                .TextAlign(TextAlign.Center)
+                                .Width(80)
+                                .RendererFunction("renderActionModify"),
+                            F.RenderField()
                                 .HeaderText("编号")
                                 .DataField("DormID")
                                 .TextAlign(TextAlign.Center)
                                 .Width(80)
                                 .Hidden(true),
                             F.RenderField()
-                                .HeaderText("房间号")
-                                .DataField("FJH")
-                                .TextAlign(TextAlign.Center)
-                                .Width(80),
-                            F.RenderField()
                                 .HeaderText("楼栋")
                                 .DataField("Region")
                                 .TextAlign(TextAlign.Center)
                                 .Width(130),
+                            F.RenderField()
+                                .HeaderText("房间号")
+                                .DataField("FJH")
+                                .TextAlign(TextAlign.Center)
+                                .Width(80),
                             F.RenderField()
                                 .HeaderText("房间类型")
                                 .DataField("SSLX")
@@ -194,17 +232,17 @@
                                 .HeaderText("面向学生性别")
                                 .DataField("MXXSXB")
                                 .TextAlign(TextAlign.Center)
-                                .Width(80),
+                                .Width(100),
                             F.RenderField()
                                 .HeaderText("面向学生层次")
                                 .DataField("MXXSCC")
                                 .TextAlign(TextAlign.Center)
-                                .Width(80),
+                                .Width(100),
                             F.RenderField()
                                 .HeaderText("入住单位")
                                 .DataField("DeptID")
-                                .TextAlign(TextAlign.Center)
-                                .Width(80),
+                                .TextAlign(TextAlign.Left)
+                                .Width(200),
                             F.RenderField()
                                 .HeaderText("备注")
                                 .DataField("Remark")
@@ -379,6 +417,21 @@
             //    )
             //    .DataSource(ViewBag.gridDorm)
         )
+    )
+
+    @(
+        F.Window()
+            .ID("window1")
+            .Title("弹出窗体")
+            .EnableIFrame(true)
+            .EnableMaximize(true)
+            .Target(Target.Top)
+            .EnableResize(true)
+            //.Listener("close", "onWindow1Close")
+            .IsModal(true)
+            .Width(850)
+            .Height(550)
+            .Hidden(true)
     )
 }
 

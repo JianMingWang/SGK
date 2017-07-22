@@ -8,30 +8,17 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.IO;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.SS.Formula.Eval;
 using SGK.Controllers;
+using SGK.Areas.JC.Models;
 
 namespace SGK.Areas.JC.Controllers
 {
-    public class ddlModel
-    {
-        public int value { get; set; }
-        public string text { get; set; }
-    }
-
-    public class SearchModel
-    {
-        public string FJH { get; set; }
-        public string SSYQ { get; set; }
-        public string SSLD { get; set; }
-        public List<string> data { get; set; }
-    }
 
     public class DormController : BaseController
     {
+
+        #region Index
+
         // GET: JC/Dorm
         public ActionResult Index()
         {
@@ -40,52 +27,6 @@ namespace SGK.Areas.JC.Controllers
             BindData_DDL();
             return View();
         }
-
-        #region 绑定下拉框
-
-        private void BindData_DDL()
-        {
-            ddlModel model1 = new ddlModel();
-            ddlModel model2 = new ddlModel();
-
-            model1.value = 1;
-            model1.text = "one";
-            model2.value = 2;
-            model2.text = "two";
-
-            List<ddlModel> data = new List<ddlModel>();
-            data.Add(model1);
-            data.Add(model2);
-
-            ViewBag.ddlDataSource = data;
-        }
-
-        #endregion
-
-        #region 搜索
-
-        [HttpPost]
-        public ActionResult btnSearchClick(SearchModel model)
-        {
-            if (model != null)
-            {
-                Alert.Show("成功" + model.FJH + model.SSLD + model.SSYQ + " " + model.data.Count);
-            }
-            else
-            {
-                Alert.Show("失败");
-            }
-
-            return UIHelper.Result();
-        }
-
-        public ActionResult btnReset()
-        {
-            Alert.Show("重置");
-            return UIHelper.Result();
-        }
-
-        #endregion
 
         #region 绑定树
         public void BindData_Tree()
@@ -160,7 +101,7 @@ namespace SGK.Areas.JC.Controllers
                 r["DormID"] = row["DormID"];
                 r["BuildingID"] = row["BuildingID"];
                 r["SSLC"] = row["SSLC"];
-                r["FJH"] = row["Building"] + "-" + row["FJH"];
+                r["FJH"] = row["FJH"];
                 r["SSLX"] = Exchange.NoToSSLX(row["SSLX"].ToString());
                 r["ZSFY"] = row["ZSFY"];
                 r["CWS"] = row["CWS"];
@@ -337,6 +278,73 @@ namespace SGK.Areas.JC.Controllers
         }
         #endregion
 
+        #region 绑定下搜索拉框
+
+        private void BindData_DDL()
+        {
+            List<ddlModel> data = new List<ddlModel>();
+            data.Add(new ddlModel(1, "one"));
+            data.Add(new ddlModel(2, "two"));
+
+            ViewBag.ddlDataSource = data;
+        }
+
+        #endregion
+
+        #region 搜索
+
+        [HttpPost]
+        public ActionResult btnSearchClick(SearchModel model)
+        {
+            if (model != null)
+            {
+                Alert.Show("成功" + model.FJH + model.SSLD + model.SSYQ + " " + model.data.Count);
+            }
+            else
+            {
+                Alert.Show("失败");
+            }
+
+            return UIHelper.Result();
+        }
+
+        public ActionResult btnReset()
+        {
+            Alert.Show("重置");
+            return UIHelper.Result();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Modify
+        public ActionResult Modify()
+        {
+            string DormID = Request.QueryString["id"].ToString();
+            return View("Modify", GetModifyData(DormID));
+        }
+
+        private ModifyModel GetModifyData(string DormID)
+        {
+            ModifyModel model = new ModifyModel();
+
+            vw_Dorm dorm = (from vw_Dorm in db.vw_Dorm where (vw_Dorm.DormID == DormID) select vw_Dorm).ToList().First();
+
+            model.ID = dorm.DormID;
+            model.Campus = dorm.Campus;
+            model.Region = dorm.Region;
+            model.SSLD = dorm.Building;
+            model.FJH = dorm.FJH;
+            model.SSLX = ((dorm.SSLX == null) || (dorm.SSLX == "")) ? -1 : Convert.ToInt32(dorm.SSLX);
+            model.ZSFY = (dorm.ZSFY == null) ? "0" : dorm.ZSFY.ToString();
+            model.MXXSCC = ((dorm.MXXSCC == null) || (dorm.MXXSCC == "")) ? -1 : Convert.ToInt32(dorm.MXXSCC);
+            model.MXXSXB = ((dorm.MXXSXB == null) || (dorm.MXXSXB == "")) ? -1 : Convert.ToInt32(dorm.MXXSXB);
+            model.Remark = dorm.Remark;
+
+            return model;
+        }
+        #endregion
 
     }
 }
