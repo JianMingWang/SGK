@@ -5,10 +5,39 @@
 }
 
 @section script{
+    <script src="~/Content/layer/layer.js"></script>
     <script>
+    // 公共方法 - 显示通知框
+    //通知
+    //Icon 0代表警告 1代表成功 2代表错误 5哭脸 6 笑脸
+    function notify(message, icons) {
+        layer.msg(message, {
+            icon: icons,
+            time: 2000, //2秒关闭（如果不配置，默认是3秒）
+            offset: 't',
+            skin: 'layui-layer-lan'
+        });
+    }
 
     function lofInfo(data) {
         console.log(data);
+        notify("修改成功！", 1);
+    }
+
+    function GridRefreshPostBack(gridName) {
+        var grid = F.ui.gridDorm;
+        var FJH = F.ui.txbRoomNum.getText();
+        var SSYQ = F.ui.ddlSSYQ.getValue();
+        var SSLD = F.ui.ddlSSLD.getValue();
+
+        var params = { "FJH": FJH, "SSYQ": SSYQ, "SSLD": SSLD };
+
+        // 触发后台事件
+        F.doPostBack('@Url.Action("GridRefreshPostBack")', {
+            gridName: gridName,
+            gridFields: grid.fields,
+            typeParams: params
+        });
     }
 
     //下载模板
@@ -21,43 +50,62 @@
         var FJH = F.ui.txbRoomNum.getText();
         var SSYQ = F.ui.ddlSSYQ.getValue();
         var SSLD = F.ui.ddlSSLD.getValue();
-        var data = [];
-        data.push({ "1": "one" });
-        data.push({ "2": "two" });
-        data.push({ "3": "three" });
+        var gridField = F.ui.gridDorm.fields;
 
         F.doPostBack('@Url.Action("btnSearchClick")', {
             FJH: FJH,
             SSYQ: SSYQ,
             SSLD: SSLD,
-            data: data
+            gridField: gridField
         });
     }
 
     //重置搜索条件
     function btnResetClick() {
-        console.log(F.ui.txbRoomNum.getText());
+        var gridField = F.ui.gridDorm.fields;
         F.ui.txbRoomNum.reset();
         F.ui.ddlSSYQ.reset();
         F.ui.ddlSSLD.reset();
-        F.doPostBack('@Url.Action("btnReset")');
-        }
+        F.doPostBack('@Url.Action("btnReset")', {
+            FJH: "",
+            SSYQ: "",
+            SSLD: "",
+            gridField: gridField
+        });
+    }
 
-        function renderActionModify() {
-            return '<a href="javascript:;" class="mywindowfield"><i class="ui-icon f-icon-edit f-grid-cell-iconfont"></i></a>';
-        }
+    function renderActionModify() {
+        return '<a href="javascript:;" class="mywindowfield"><i class="ui-icon f-icon-edit f-grid-cell-iconfont"></i></a>';
+    }
 
-        function openWindow(rowData) {
-            // 
-            var id = rowData.id;
-            var text = rowData.values.Region + "-" + rowData.values.FJH;
+    function openWindow(rowData) {
+        //
+        var id = rowData.id;
+        var text = rowData.values.Region + "-" + rowData.values.FJH;
 
-            var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Modify")';
+        var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Modify")';
             var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
 
             // 显示窗体
             F.ui.window1.show(iframeUrl, '编辑宿舍信息 - ' + text);
         }
+
+        //单条记录修改成功
+        function ModifySuccess() {
+            var FJH = F.ui.txbRoomNum.getText();
+            var SSYQ = F.ui.ddlSSYQ.getValue();
+            var SSLD = F.ui.ddlSSLD.getValue();
+            var gridField = F.ui.gridDorm.fields;
+
+            notify("修改成功！", 1);
+            F.doPostBack('@Url.Action("ReBindData_Grid")', {
+                FJH: FJH,
+                SSYQ: SSYQ,
+                SSLD: SSLD,
+                gridField: gridField
+            });
+        }
+
 
         F.ready(function () {
 
@@ -73,7 +121,7 @@
             //grid.el.on('click', 'a.deletefield', function (event) {
             //    F.alert('尚未实现！');
             //});
-
+            console.log("加载完成");
         });
     </script>
 }
@@ -107,7 +155,6 @@
                         .AllowPaging(true)
                         .PageSize(20)
                         .DataIDField("DormID")
-                        //.DataTextField("Name")
                         .Toolbars(
                             F.Toolbar()
                                 .ID("")
@@ -126,6 +173,8 @@
                                         .LabelAlign(LabelAlign.Right)
                                         .EmptyText("请选择宿舍区")
                                         .Width(250)
+                                        .OnSelectedIndexChanged(Url.Action("ddlSSYQ_SelectedIndexChanged"),"ddlSSYQ")
+                                        //.Listener("change","console.log(F.ui.ddlSSYQ);")//change事件
                                         .DataTextField("text")
                                         .DataValueField("value")
                                         .DataSource(ViewBag.ddlDataSource),
@@ -136,6 +185,7 @@
                                         .LabelAlign(LabelAlign.Right)
                                         .EmptyText("请选择宿舍楼")
                                         .Width(250)
+                                        .Enabled(false)
                                         .DataTextField("text")
                                         .DataValueField("value")
                                         .DataSource(ViewBag.ddlDataSource),
@@ -167,6 +217,13 @@
                                         .ID("btnDelList")
                                         .Icon(Icon.Delete)
                                         .Text("删除"),
+                                    F.ToolbarSeparator()
+                                        .MarginLeft(10)
+                                        .MarginRight(10),
+                                    F.Button()
+                                        .ID("btn")
+                                        .Icon(Icon.Delete)
+                                        .Text("批量编辑"),
                                     F.ToolbarSeparator()
                                         .MarginLeft(10)
                                         .MarginRight(10),

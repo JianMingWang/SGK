@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using SGK.Controllers;
 using SGK.Areas.JC.Models;
+using Newtonsoft.Json.Linq;
 
 namespace SGK.Areas.JC.Controllers
 {
@@ -22,7 +23,7 @@ namespace SGK.Areas.JC.Controllers
         // GET: JC/Dorm
         public ActionResult Index()
         {
-            BindData_Tree();
+            //BindData_Tree();
             BindData_Grid();
             BindData_DDL();
             return View();
@@ -87,11 +88,80 @@ namespace SGK.Areas.JC.Controllers
         #endregion
 
         #region 绑定表格
-        public void BindData_Grid()
+        public void BindData_Grid()//初始化页面 绑定数据
         {
             var dormlist = from d in db.vw_Dorm where 1 == 1 orderby d.DormID select d;
+            ViewBag.gridDorm = vw_DormToDataTable(dormlist.ToList());
+        }
+
+        public ActionResult ReBindData_Grid(SearchModel model)//Action 更新 Grid 数据
+        {
+            #region 查询条件
+            string FJH = "";
+            string SSYQ = "";
+            string SSLD = "";
+            if (model.FJH != null)
+            {
+                FJH = model.FJH;
+            }
+            if (model.SSYQ != null && model.SSYQ != "-1")
+            {
+                SSYQ = model.SSYQ;
+                if (model.SSLD != null && model.SSLD != "-1")
+                {
+                    SSLD = model.SSLD;
+                }
+            }
+
+            var dormlist = from d in db.vw_Dorm orderby d.DormID select d;
+
+            if (FJH == "" && SSYQ == "")
+            {
+                //全部搜索
+                dormlist = from d in db.vw_Dorm orderby d.DormID select d;
+            }
+            if (FJH != "" && SSYQ == "")
+            {
+                //搜索房间号
+                dormlist = from d in db.vw_Dorm where (d.FJH == FJH) orderby d.DormID select d;
+            }
+            if (FJH == "" && SSYQ != "" && SSLD == "")
+            {
+                //搜索园区
+                dormlist = from d in db.vw_Dorm where (d.RegionID == SSYQ) orderby d.DormID select d;
+            }
+            if (FJH == "" && SSYQ != "" && SSLD != "")
+            {
+                //搜索楼栋
+                dormlist = from d in db.vw_Dorm where (d.BuildingID == SSLD) orderby d.DormID select d;
+            }
+            if (FJH != "" && SSYQ != "" && SSLD == "")
+            {
+                //搜索园区、房间号
+                dormlist = from d in db.vw_Dorm where (d.FJH == FJH && d.RegionID == SSYQ) orderby d.DormID select d;
+            }
+            if (FJH != "" && SSYQ != "" && SSLD != "")
+            {
+                //搜索房间号、园区、楼栋
+                dormlist = from d in db.vw_Dorm where (d.FJH == FJH && d.BuildingID == SSLD) orderby d.DormID select d;
+            }
+            #endregion
+
+            UIHelper.Grid("gridDorm").DataSource(vw_DormToDataTable(dormlist.ToList()), model.gridField);
+            //Alert.Show("搜索完毕！");
+
+            return UIHelper.Result();
+        }
+
+        /// <summary>
+        /// vw_Dorm List转换DataTable
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private DataTable vw_DormToDataTable(List<vw_Dorm> list)
+        {
             DataTable dtSource = new DataTable();
-            dtSource = dormlist.ToDataTable(rec => new object[] { dormlist });
+            dtSource = list.ToDataTable(rec => new object[] { list });
 
             DataTable dt = new DataTable();
             dt = dtSource.Clone();
@@ -139,12 +209,9 @@ namespace SGK.Areas.JC.Controllers
 
                 dt.Rows.Add(r);
             }
-            ViewBag.gridDorm = dt;
 
-
+            return dt;
         }
-
-
         #endregion
 
         #region 下载模板
@@ -282,11 +349,48 @@ namespace SGK.Areas.JC.Controllers
 
         private void BindData_DDL()
         {
-            List<ddlModel> data = new List<ddlModel>();
-            data.Add(new ddlModel(1, "one"));
-            data.Add(new ddlModel(2, "two"));
+            List<ddlModel> ddlSSYQ_data = new List<ddlModel>();
+            ddlSSYQ_data.Add(new ddlModel("-1", "全部"));
 
-            ViewBag.ddlDataSource = data;
+            var regionList = from T_Region in db.T_Region where (1 == 1) select T_Region;
+            if (regionList.Any())
+            {
+                foreach (T_Region region in regionList)
+                {
+                    ddlSSYQ_data.Add(new ddlModel(region.ID, region.Name));
+                }
+            }
+            ViewBag.ddlDataSource = ddlSSYQ_data;
+        }
+
+        [HttpPost]
+        public ActionResult ddlSSYQ_SelectedIndexChanged(string ddlSSYQ, string ddlSSYQ_text)
+        {
+            if (ddlSSYQ == "-1")//选择全部园区
+            {
+                UIHelper.DropDownList("ddlSSLD").Enabled(false);
+            }
+            List<ddlModel> data = new List<ddlModel>();
+            data.Add(new ddlModel("-1", "全部"));
+
+            var buildingList = from T_Building in db.T_Building where (T_Building.SZYQ == ddlSSYQ) select T_Building;
+
+            if (buildingList.Any())
+            {
+                foreach (T_Building building in buildingList)
+                {
+                    data.Add(new ddlModel(building.ID, building.Name));
+                }
+
+                UIHelper.DropDownList("ddlSSLD").DataSource(data, "value", "text");
+                UIHelper.DropDownList("ddlSSLD").Enabled(true);
+            }
+            else
+            {
+                UIHelper.DropDownList("ddlSSLD").Enabled(false);
+            }
+
+            return UIHelper.Result();
         }
 
         #endregion
@@ -298,19 +402,28 @@ namespace SGK.Areas.JC.Controllers
         {
             if (model != null)
             {
-                Alert.Show("成功" + model.FJH + model.SSLD + model.SSYQ + " " + model.data.Count);
+                //界面 Layer弹出框 执行view中的js
+                PageContext.RegisterStartupScript("notify('搜索完成！', 1)");
+                return ReBindData_Grid(model);
             }
             else
             {
-                Alert.Show("失败");
+                Alert.Show("出现错误！错误Action:btnSearchClick");
             }
 
             return UIHelper.Result();
         }
 
-        public ActionResult btnReset()
+        public ActionResult btnReset(SearchModel model)
         {
-            Alert.Show("重置");
+            if (model != null)
+            {
+                return ReBindData_Grid(model);
+            }
+            else
+            {
+                Alert.Show("出现错误！错误Action:btnReset");
+            }
             return UIHelper.Result();
         }
 
@@ -336,15 +449,55 @@ namespace SGK.Areas.JC.Controllers
             model.Region = dorm.Region;
             model.SSLD = dorm.Building;
             model.FJH = dorm.FJH;
-            model.SSLX = ((dorm.SSLX == null) || (dorm.SSLX == "")) ? -1 : Convert.ToInt32(dorm.SSLX);
+            model.CWS = dorm.CWS.ToString();
+            model.SSLX = ((dorm.SSLX == null) || (dorm.SSLX == "")) ? "-1" : dorm.SSLX;
             model.ZSFY = (dorm.ZSFY == null) ? "0" : dorm.ZSFY.ToString();
-            model.MXXSCC = ((dorm.MXXSCC == null) || (dorm.MXXSCC == "")) ? -1 : Convert.ToInt32(dorm.MXXSCC);
-            model.MXXSXB = ((dorm.MXXSXB == null) || (dorm.MXXSXB == "")) ? -1 : Convert.ToInt32(dorm.MXXSXB);
+            model.MXXSCC = ((dorm.MXXSCC == null) || (dorm.MXXSCC == "")) ? "-1" : dorm.MXXSCC;
+            model.MXXSXB = ((dorm.MXXSXB == null) || (dorm.MXXSXB == "")) ? "-1" : dorm.MXXSXB;
             model.Remark = dorm.Remark;
 
             return model;
         }
+
+        [HttpPost]
+        public ActionResult Modify_btnSaveClose_Click(FormCollection form)
+        {
+            string ID = form["DormID"].ToString();
+            string CWS = form["CWS"].ToString();
+            string SSLX = (form["SSLX"].ToString() == "-1") ? null : form["SSLX"].ToString();
+            string ZSFY = form["ZSFY"].ToString();
+            string MXXSCC = (form["MXXSCC"].ToString() == "-1") ? null : form["MXXSCC"].ToString();
+            string MXXSXB = (form["MXXSXB"].ToString() == "-1") ? null : form["MXXSXB"].ToString();
+            string Remark = form["Remark"].ToString();
+
+            T_Dorm dorm = db.T_Dorm.Find(ID);
+            dorm.CWS = Convert.ToInt32(CWS);
+            dorm.SSLX = SSLX;
+            dorm.ZSFY = Convert.ToInt32(ZSFY);
+            dorm.MXXSCC = MXXSCC;
+            dorm.MXXSXB = MXXSXB;
+            dorm.Remark = Remark;
+            try
+            {
+                db.SaveChanges();
+                PageContext.RegisterStartupScript(ActiveWindow.GetHideExecuteScriptReference("ModifySuccess();"));
+            }
+            catch
+            {
+                Alert.Show("修改失败！");
+            }
+
+            return UIHelper.Result();
+        }
         #endregion
 
+        public ActionResult GridRefreshPostBack(string gridName, JArray gridFields, JObject typeParams)
+        {
+            var grid = UIHelper.Grid(gridName);
+
+
+            grid.DataSource("", gridFields);
+            return UIHelper.Result();
+        }
     }
 }
