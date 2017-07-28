@@ -1,0 +1,160 @@
+﻿@model SGK.Areas.JC.Models.MultiModifyModel
+@{
+    ViewBag.Title = "多项编辑";
+    var F = Html.F();
+}
+@section script{
+    <script>
+        function cbxChanged(cbxName) {
+            var cbx = F(cbxName);
+            var ctrID = cbx.getAttribute('ctrID');
+            var ctr = F(ctrID);
+            if (cbx.getValue() == false) {
+                ctr.reset();
+                ctr.setEnabled(false);
+            }
+            if (cbx.getValue() == true) {
+                ctr.setEnabled(true);
+            }
+            //console.log(ctr);
+            //console.log(cbx.getValue());
+            //console.log(cbxName);
+            //console.log(cbx.getAttribute('ctrID'));
+        }
+
+        function MultiModify_btnSaveClose_Click() {
+            var form = F.ui.MultiModifyForm;
+            console.log(form);
+            //F.doPostBack('@Url.Content("~/JC/Dorm/MultiModify_btnSaveClose_Click")', form);
+        }
+    </script>
+}
+@section body{
+    @(
+ F.Form()
+            .BodyPadding(10)
+            .AutoScroll(true)
+            .ShowHeader(false)
+            .ShowBorder(false)
+            .ID("MultiModifyForm")
+            .IsViewPort(true)
+            .Toolbars(
+                F.Toolbar()
+                    .Items(
+                        F.Button()
+                            .Icon(Icon.SystemClose)
+                            .Text("关闭")
+                            .ID("btnHide")
+                            .Listener("click", "F.activeWindow.hide();"),
+                        F.ToolbarSeparator(),
+                        F.Button()
+                            .OnClick(Url.Action("MultiModify_btnSaveClose_Click"), "MultiModifyForm")
+                            .Icon(Icon.SystemSave)
+                            .Text("保存修改")
+                            .ID("btnSaveClose")
+                    )
+            )
+            .Rows(
+                F.FormRow()
+                    .Hidden(true)
+                    .Items(
+                        F.TextBox()
+                            .ID("DormList")
+                            .Text(@Model.DormList)
+                            .Enabled(false)
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.CheckBox()
+                            .ID("cbxSSLX")
+                            .ShowLabel(true)
+                            .LabelWidth(150)
+                            .Label("1、修改宿舍类型")
+                            .Listener("change", "cbxChanged(cbxSSLX);")
+                            .Attribute("ctrID", "SSLX")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .Required(false)
+                            .AutoSelectFirstItem(false)
+                            .Label("宿舍类型")
+                            .Enabled(false)
+                            .EmptyText("请选择宿舍类型...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .DataSource(@Model.SSLX_ddlList)
+                            .ID("SSLX")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.CheckBox()
+                            .ID("cbxZSFY")
+                            .ShowLabel(true)
+                            .LabelWidth(150)
+                            .Label("2、修改住宿标准")
+                            .Listener("change", "cbxChanged(cbxZSFY);")
+                            .Attribute("ctrID", "ZSFY")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.NumberBox()
+                            .Required(false)
+                            .NoDecimal(true)
+                            .NoNegative(true)
+                            .Enabled(false)
+                            .Increment(50)
+                            .Label("住宿标准")
+                            .ID("ZSFY")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.CheckBox()
+                            .ID("cbxMXXSCC")
+                            .ShowLabel(true)
+                            .LabelWidth(150)
+                            .Listener("change", "cbxChanged(cbxMXXSCC);")
+                            .Label("3、修改面向学生层次")
+                            .Attribute("ctrID", "MXXSCC")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .Required(false)
+                            .AutoSelectFirstItem(false)
+                            .Label("面向学生层次")
+                            .EmptyText("请选择面向学生层次...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .Enabled(false)
+                            .DataSource(@Model.MXXSCC_ddlList)
+                            .ID("MXXSCC")
+                        
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.CheckBox()
+                            .ID("cbxMXXSXB")
+                            .ShowLabel(true)
+                            .LabelWidth(150)
+                            .Listener("change", "cbxChanged(cbxMXXSXB);")
+                            .Label("4、修改面向学生性别")
+                            .Attribute("ctrID", "MXXSXB")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .Required(false)
+                            .AutoSelectFirstItem(false)
+                            .Label("面向学生性别")
+                            .EmptyText("请选择面向学生性别...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .Enabled(false)
+                            .DataSource(@Model.MXXSXB_ddlList)
+                            .ID("MXXSXB")
+                    )
+                )
+            )
+    )
+}

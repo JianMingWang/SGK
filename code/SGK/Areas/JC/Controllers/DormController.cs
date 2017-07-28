@@ -438,6 +438,12 @@ namespace SGK.Areas.JC.Controllers
             return View("Modify", GetModifyData(DormID));
         }
 
+        public ActionResult MultiModify()
+        {
+            string DormList = Request.QueryString["DormList"].ToString();
+            return View("MultiModify", GetMultiModifyData(DormList));
+        }
+
         private ModifyModel GetModifyData(string DormID)
         {
             ModifyModel model = new ModifyModel();
@@ -457,6 +463,13 @@ namespace SGK.Areas.JC.Controllers
             model.Remark = dorm.Remark;
 
             return model;
+        }
+
+        private MultiModifyModel GetMultiModifyData(string dormList)
+        {
+            MultiModifyModel data = new MultiModifyModel();
+            data.DormList = dormList;
+            return data;
         }
 
         [HttpPost]
@@ -484,11 +497,187 @@ namespace SGK.Areas.JC.Controllers
             }
             catch
             {
-                Alert.Show("修改失败！");
+                PageContext.RegisterStartupScript("notify('修改保存失败！','0')");
             }
 
             return UIHelper.Result();
         }
+
+        [HttpPost]
+        public ActionResult MultiModify_btnSaveClose_Click(FormCollection form)
+        {
+            string DormList = form["DormList"].ToString();
+            string[] dormList = DormList.Split('_');
+
+            string SSLX = form["SSLX"].ToString();
+            string ZSFY = form["ZSFY"].ToString();
+            string MXXSCC = (form["MXXSCC"].ToString() == "-1") ? "" : form["MXXSCC"].ToString();
+            string MXXSXB = (form["MXXSXB"].ToString() == "-1") ? "" : form["MXXSXB"].ToString();
+
+            foreach (string item in dormList)
+            {
+                T_Dorm dorm = db.T_Dorm.Find(item);
+                if (dorm != null)
+                {
+                    if (form["cbxSSLX"].ToString() == "true")
+                    {
+                        dorm.SSLX = SSLX;
+                    }
+                    if (form["cbxZSFY"].ToString() == "true")
+                    {
+                        dorm.ZSFY = Convert.ToInt32(ZSFY);
+                    }
+                    if (form["cbxMXXSCC"].ToString() == "true")
+                    {
+                        dorm.MXXSCC = MXXSCC;
+                    }
+                    if (form["cbxMXXSXB"].ToString() == "true")
+                    {
+                        dorm.MXXSXB = MXXSXB;
+                    }
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+                PageContext.RegisterStartupScript(ActiveWindow.GetHideExecuteScriptReference("ModifySuccess();"));
+            }
+            catch
+            {
+                PageContext.RegisterStartupScript("notify('批量修改保存失败！','0')");
+            }
+            return UIHelper.Result();
+        }
+
+        public ActionResult btnMultiModify_Click(JArray selectRowsID)
+        {
+            return UIHelper.Result();
+        }
+
+
+        #endregion
+
+        #region Add
+
+        public ActionResult Add()
+        {
+            GetAddData();
+            return View("Add", GetAddData());
+        }
+
+        private AddModel GetAddData()
+        {
+            AddModel model = new AddModel();
+
+            var campusList = from T_Campus in db.T_Campus where (1 == 1) orderby T_Campus.ID select T_Campus;
+            if (campusList.Any())
+            {
+                foreach (T_Campus campus in campusList)
+                {
+                    model.Campus_ddlList.Add(new ddlModel(campus.ID.ToString(), campus.Name.ToString()));
+                }
+            }
+
+            return model;
+        }
+
+        public ActionResult ddlSSXQ_Add_SelectedIndexChanged(string SSXQ, string SSXQ_text)
+        {
+            UIHelper.DropDownList("SSYQ").Reset();
+            UIHelper.DropDownList("SSYQ").Enabled(false);
+            UIHelper.DropDownList("SSLD").Reset();
+            UIHelper.DropDownList("SSLD").Enabled(false);
+
+            List<ddlModel> ddlData = new List<ddlModel>();
+            var RegionList = from T_Region in db.T_Region where (T_Region.SZXQ == SSXQ) orderby T_Region.ID select T_Region;
+            if (RegionList.Any())
+            {
+                foreach (T_Region region in RegionList)
+                {
+                    ddlData.Add(new ddlModel(region.ID, region.Name));
+                }
+                UIHelper.DropDownList("SSYQ").DataSource(ddlData, "value", "text");
+                UIHelper.DropDownList("SSYQ").Enabled(true);
+            }
+            else
+            {
+                PageContext.RegisterStartupScript("notify('获取园区信息失败！','0')");
+            }
+
+            return UIHelper.Result();
+        }
+
+        public ActionResult ddlSSYQ_Add_SelectedIndexChanged(string SSYQ, string SSYQ_text)
+        {
+            UIHelper.DropDownList("SSLD").Reset();
+            UIHelper.DropDownList("SSLD").Enabled(false);
+
+            List<ddlModel> ddlData = new List<ddlModel>();
+            var BuildingLIst = from T_Building in db.T_Building where (T_Building.SZYQ == SSYQ) orderby T_Building.ID select T_Building;
+            if (BuildingLIst.Any())
+            {
+                foreach (T_Building Building in BuildingLIst)
+                {
+                    ddlData.Add(new ddlModel(Building.ID, Building.Name));
+                }
+                UIHelper.DropDownList("SSLD").DataSource(ddlData, "value", "text");
+                UIHelper.DropDownList("SSLD").Enabled(true);
+            }
+            else
+            {
+                PageContext.RegisterStartupScript("notify('获取楼栋信息失败！','0')");
+            }
+
+            return UIHelper.Result();
+        }
+
+        public ActionResult Add_btnSaveClose_Click(FormCollection form)
+        {
+            string SSLD = form["SSLD"].ToString();
+            string SSLC = (Convert.ToInt32(form["SSLC"])).ToString("00");
+            string FJH = (Convert.ToInt32(form["FJH"])).ToString("0000");
+            string SSLX = form["SSLX"].ToString();
+            string SSFY = form["SSFY"].ToString();
+            string CWS = form["CWS"].ToString();
+            string MXXSXB = form["MXXSXB"].ToString();
+            string MXXSCC = form["MXXSCC"].ToString();
+            string Remark = form["Remark"].ToString();
+
+            if (FJH.Substring(0, 2) == SSLC)
+            {
+                string ID = SSLD + SSLC + FJH;
+                T_Dorm dorm = db.T_Dorm.Find(ID);
+                if (dorm == null)
+                {
+                    dorm = new T_Dorm();
+                    dorm.ID = ID;
+                    dorm.SSLD = SSLD;
+                    dorm.SSLC = Convert.ToInt32(SSLC);
+                    dorm.FJH = form["FJH"].ToString();
+                    dorm.SSLX = SSLX;
+                    dorm.ZSFY = Convert.ToInt32(SSFY);
+                    dorm.CWS = Convert.ToInt32(CWS);
+                    dorm.KYCWS = Convert.ToInt32(CWS);
+                    dorm.MXXSXB = MXXSXB == "-1" ? null : MXXSXB;
+                    dorm.MXXSCC = MXXSCC == "-1" ? null : MXXSCC;
+                    dorm.Remark = Remark == "" ? null : Remark;
+
+                    db.T_Dorm.Add(dorm);
+                    db.SaveChanges();
+                    PageContext.RegisterStartupScript(ActiveWindow.GetHideExecuteScriptReference("AddSuccess();"));
+                }
+                else
+                {
+                    PageContext.RegisterStartupScript("notify('保存失败，宿舍信息已存在！','0')");
+                }
+            }
+            else
+            {
+                PageContext.RegisterStartupScript("notify('保存失败，寝室号与楼层信息不符，请核对后重新填写！','0')");
+            }
+            return UIHelper.Result();
+        }
+
         #endregion
 
         public ActionResult GridRefreshPostBack(string gridName, JArray gridFields, JObject typeParams)

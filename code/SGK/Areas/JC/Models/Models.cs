@@ -64,4 +64,52 @@ namespace SGK.Areas.JC.Models
             this.MXXSXB_ddlList.Add(new ddlModel("1", "女"));
         }
     }
+
+    public class MultiModifyModel
+    {
+        public string DormList { get; set; }
+
+        public List<ddlModel> SSLX_ddlList = new List<ddlModel>();
+        public List<ddlModel> MXXSCC_ddlList = new List<ddlModel>();
+        public List<ddlModel> MXXSXB_ddlList = new List<ddlModel>();
+
+        public MultiModifyModel()
+        {
+            this.SSLX_ddlList.Add(new ddlModel("0", "普通住宿"));
+            this.SSLX_ddlList.Add(new ddlModel("1", "非住宿用房"));
+
+            this.MXXSCC_ddlList.Add(new ddlModel("-1", "暂不设定"));
+            this.MXXSCC_ddlList.Add(new ddlModel("0", "本科生"));
+            this.MXXSCC_ddlList.Add(new ddlModel("1", "硕士生"));
+            this.MXXSCC_ddlList.Add(new ddlModel("2", "博士生"));
+
+            this.MXXSXB_ddlList.Add(new ddlModel("-1", "暂不设定"));
+            this.MXXSXB_ddlList.Add(new ddlModel("0", "男"));
+            this.MXXSXB_ddlList.Add(new ddlModel("1", "女"));
+        }
+    }
+
+    public class AddModel
+    {
+        public List<ddlModel> SSLX_ddlList = new List<ddlModel>();
+        public List<ddlModel> MXXSCC_ddlList = new List<ddlModel>();
+        public List<ddlModel> MXXSXB_ddlList = new List<ddlModel>();
+        public List<ddlModel> Campus_ddlList = new List<ddlModel>();
+
+        public AddModel()
+        {
+            //this.SSLX_ddlList.Add(new ddlModel("-1", "未设定"));
+            this.SSLX_ddlList.Add(new ddlModel("0", "普通住宿"));
+            this.SSLX_ddlList.Add(new ddlModel("1", "非住宿用房"));
+
+            this.MXXSCC_ddlList.Add(new ddlModel("-1", "暂不设定"));
+            this.MXXSCC_ddlList.Add(new ddlModel("0", "本科生"));
+            this.MXXSCC_ddlList.Add(new ddlModel("1", "硕士生"));
+            this.MXXSCC_ddlList.Add(new ddlModel("2", "博士生"));
+
+            this.MXXSXB_ddlList.Add(new ddlModel("-1", "暂不设定"));
+            this.MXXSXB_ddlList.Add(new ddlModel("0", "男"));
+            this.MXXSXB_ddlList.Add(new ddlModel("1", "女"));
+        }
+    }
 }

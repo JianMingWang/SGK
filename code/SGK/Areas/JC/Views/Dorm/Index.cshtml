@@ -4,134 +4,10 @@
     var F = Html.F();
 }
 
-@section script{
-    <script src="~/Content/layer/layer.js"></script>
-    <script>
-    // 公共方法 - 显示通知框
-    //通知
-    //Icon 0代表警告 1代表成功 2代表错误 5哭脸 6 笑脸
-    function notify(message, icons) {
-        layer.msg(message, {
-            icon: icons,
-            time: 2000, //2秒关闭（如果不配置，默认是3秒）
-            offset: 't',
-            skin: 'layui-layer-lan'
-        });
-    }
-
-    function lofInfo(data) {
-        console.log(data);
-        notify("修改成功！", 1);
-    }
-
-    function GridRefreshPostBack(gridName) {
-        var grid = F.ui.gridDorm;
-        var FJH = F.ui.txbRoomNum.getText();
-        var SSYQ = F.ui.ddlSSYQ.getValue();
-        var SSLD = F.ui.ddlSSLD.getValue();
-
-        var params = { "FJH": FJH, "SSYQ": SSYQ, "SSLD": SSLD };
-
-        // 触发后台事件
-        F.doPostBack('@Url.Action("GridRefreshPostBack")', {
-            gridName: gridName,
-            gridFields: grid.fields,
-            typeParams: params
-        });
-    }
-
-    //下载模板
-    function btnDownload() {
-        window.location.href = '@Url.Action("DownloadEmptyDormitory")';
-    }
-
-    //条件搜索
-    function btnSerchClick() {
-        var FJH = F.ui.txbRoomNum.getText();
-        var SSYQ = F.ui.ddlSSYQ.getValue();
-        var SSLD = F.ui.ddlSSLD.getValue();
-        var gridField = F.ui.gridDorm.fields;
-
-        F.doPostBack('@Url.Action("btnSearchClick")', {
-            FJH: FJH,
-            SSYQ: SSYQ,
-            SSLD: SSLD,
-            gridField: gridField
-        });
-    }
-
-    //重置搜索条件
-    function btnResetClick() {
-        var gridField = F.ui.gridDorm.fields;
-        F.ui.txbRoomNum.reset();
-        F.ui.ddlSSYQ.reset();
-        F.ui.ddlSSLD.reset();
-        F.doPostBack('@Url.Action("btnReset")', {
-            FJH: "",
-            SSYQ: "",
-            SSLD: "",
-            gridField: gridField
-        });
-    }
-
-    function renderActionModify() {
-        return '<a href="javascript:;" class="mywindowfield"><i class="ui-icon f-icon-edit f-grid-cell-iconfont"></i></a>';
-    }
-
-    function openWindow(rowData) {
-        //
-        var id = rowData.id;
-        var text = rowData.values.Region + "-" + rowData.values.FJH;
-
-        var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Modify")';
-            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
-
-            // 显示窗体
-            F.ui.window1.show(iframeUrl, '编辑宿舍信息 - ' + text);
-        }
-
-        //单条记录修改成功
-        function ModifySuccess() {
-            var FJH = F.ui.txbRoomNum.getText();
-            var SSYQ = F.ui.ddlSSYQ.getValue();
-            var SSLD = F.ui.ddlSSLD.getValue();
-            var gridField = F.ui.gridDorm.fields;
-
-            notify("修改成功！", 1);
-            F.doPostBack('@Url.Action("ReBindData_Grid")', {
-                FJH: FJH,
-                SSYQ: SSYQ,
-                SSLD: SSLD,
-                gridField: gridField
-            });
-        }
-
-
-        F.ready(function () {
-
-            var grid = F.ui.gridDorm;
-            // 点击表格行中的编辑按钮
-            grid.el.on('click', 'a.mywindowfield', function (event) {
-                var rowEl = $(this).closest('.f-grid-row');
-                var rowData = grid.getRowData(rowEl);
-                openWindow(rowData);
-            });
-
-            // 点击表格行中的删除按钮
-            //grid.el.on('click', 'a.deletefield', function (event) {
-            //    F.alert('尚未实现！');
-            //});
-            console.log("加载完成");
-        });
-    </script>
-}
-
 @section body{
 <form id="fileForm" style="display:none;" method="post" enctype="multipart/form-data">
     <input type="file" id="fileupload" name="Upload" />
 </form>
-    
-
 
     @(F.Panel()
         .ShowBorder(false)
@@ -154,6 +30,9 @@
                         .EnableCheckBoxSelect(true)
                         .AllowPaging(true)
                         .PageSize(20)
+                        .KeepPagedSelection(true)
+                        .KeepCurrentSelection(true)
+                        .ClearSelectionBeforePaging(false)
                         .DataIDField("DormID")
                         .Toolbars(
                             F.Toolbar()
@@ -216,13 +95,15 @@
                                     F.Button()
                                         .ID("btnDelList")
                                         .Icon(Icon.Delete)
+                                        .Listener("click","")
                                         .Text("删除"),
                                     F.ToolbarSeparator()
                                         .MarginLeft(10)
                                         .MarginRight(10),
                                     F.Button()
-                                        .ID("btn")
-                                        .Icon(Icon.Delete)
+                                        .ID("btnMultiModify")
+                                        .Icon(Icon.Page)
+                                        .Listener("click","btnMultiModify_Click();")
                                         .Text("批量编辑"),
                                     F.ToolbarSeparator()
                                         .MarginLeft(10)
@@ -490,5 +371,172 @@
             .Height(550)
             .Hidden(true)
     )
+}
+
+@section script{
+    <script src="~/Content/layer/layer.js"></script>
+    <script>
+    // 公共方法 - 显示通知框
+    //通知
+    //Icon 0代表警告 1代表成功 2代表错误 5哭脸 6 笑脸
+        function notify(message, icons) {
+            layer.msg(message, {
+                icon: icons,
+                time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                offset: 't',
+                skin: 'layui-layer-lan'
+            });
+        }
+
+        function msg(message) {
+            layer.msg(message, {
+                time: 10000, //20s后自动关闭
+                btn: ['知道了']
+            });
+        }
+
+            function lofInfo(data) {
+                console.log(data);
+                notify("修改成功！", 1);
+            }
+
+            function GridRefreshPostBack(gridName) {
+                var grid = F.ui.gridDorm;
+                var FJH = F.ui.txbRoomNum.getText();
+                var SSYQ = F.ui.ddlSSYQ.getValue();
+                var SSLD = F.ui.ddlSSLD.getValue();
+
+                var params = { "FJH": FJH, "SSYQ": SSYQ, "SSLD": SSLD };
+
+                // 触发后台事件
+                F.doPostBack('@Url.Action("GridRefreshPostBack")', {
+                    gridName: gridName,
+                    gridFields: grid.fields,
+                    typeParams: params
+                });
+            }
+
+            //下载模板
+            function btnDownload() {
+                window.location.href = '@Url.Action("DownloadEmptyDormitory")';
+            }
+
+            //条件搜索
+            function btnSerchClick() {
+                var FJH = F.ui.txbRoomNum.getText();
+                var SSYQ = F.ui.ddlSSYQ.getValue();
+                var SSLD = F.ui.ddlSSLD.getValue();
+                var gridField = F.ui.gridDorm.fields;
+
+                F.doPostBack('@Url.Action("btnSearchClick")', {
+                    FJH: FJH,
+                    SSYQ: SSYQ,
+                    SSLD: SSLD,
+                    gridField: gridField
+                });
+            }
+
+            //重置搜索条件
+            function btnResetClick() {
+                var gridField = F.ui.gridDorm.fields;
+                F.ui.txbRoomNum.reset();
+                F.ui.ddlSSYQ.reset();
+                F.ui.ddlSSLD.reset();
+                F.doPostBack('@Url.Action("btnReset")', {
+                    FJH: "",
+                    SSYQ: "",
+                    SSLD: "",
+                    gridField: gridField
+                });
+            }
+
+            function renderActionModify() {
+                return '<a href="javascript:;" class="mywindowfield"><i class="ui-icon f-icon-edit f-grid-cell-iconfont"></i></a>';
+            }
+
+            function openWindow(rowData) {
+                var id = rowData.id;
+                var text = rowData.values.Region + "-" + rowData.values.FJH;
+
+                var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Modify")';
+                var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+                F.ui.window1.show(iframeUrl, '编辑宿舍信息 - ' + text);
+            }
+
+            //单条记录修改成功
+            function ModifySuccess() {
+                var FJH = F.ui.txbRoomNum.getText();
+                var SSYQ = F.ui.ddlSSYQ.getValue();
+                var SSLD = F.ui.ddlSSLD.getValue();
+                var gridField = F.ui.gridDorm.fields;
+
+                notify("修改成功！", 1);
+                F.doPostBack('@Url.Action("ReBindData_Grid")', {
+                    FJH: FJH,
+                    SSYQ: SSYQ,
+                    SSLD: SSLD,
+                    gridField: gridField
+                });
+            }
+        
+            function btnAdd() {
+                var iframeWindowUrl = '@Url.Content("~/JC/Dorm/Add")';
+                var iframeUrl = iframeWindowUrl;
+
+                F.ui.window1.show(iframeUrl, '新增宿舍');
+            }
+
+            //单条记录添加成功
+            function AddSuccess() {
+                var gridField = F.ui.gridDorm.fields;
+
+                notify("添加成功！", 1);
+                F.doPostBack('@Url.Action("ReBindData_Grid")', {
+                    FJH: '',
+                    SSYQ: '',
+                    SSLD: '',
+                    gridField: gridField
+                });
+            }
+
+            function btnMultiModify_Click() {
+                var grid = F.ui.gridDorm;
+                if (!grid.hasSelection()) {
+                    notify("没有选中项！", 0);
+                    return;
+                }
+                else {
+                    //notify("请注意批量修改！", 0);
+                }
+                var selectRowsID = grid.getSelectedRows();
+                var dormList = '';
+                for (var k in selectRowsID) {
+                    dormList += selectRowsID[k];
+                    dormList += '_';
+                }
+                //console.log(dormList);
+
+                var iframeWindowUrl = '@Url.Content("~/JC/Dorm/MultiModify")';
+                var iframeUrl = iframeWindowUrl + '?DormList=' + dormList;
+
+                F.ui.window1.show(iframeUrl, '批量编辑');
+            }
+
+            F.ready(function () {
+                var grid = F.ui.gridDorm;
+                // 点击表格行中的编辑按钮
+                grid.el.on('click', 'a.mywindowfield', function (event) {
+                    var rowEl = $(this).closest('.f-grid-row');
+                    var rowData = grid.getRowData(rowEl);
+                    openWindow(rowData);
+                });
+
+                // 点击表格行中的删除按钮
+                //grid.el.on('click', 'a.deletefield', function (event) {
+                //    F.alert('尚未实现！');
+                //});
+            });
+    </script>
 }
 

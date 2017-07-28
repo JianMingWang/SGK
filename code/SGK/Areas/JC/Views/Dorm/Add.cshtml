@@ -1,0 +1,164 @@
+﻿@model SGK.Areas.JC.Models.AddModel
+@{
+    ViewBag.Title = "新增";
+    var F = Html.F();
+}
+@section script{
+    <script src="~/Content/layer/layer.js"></script>
+    <script>
+        // 公共方法 - 显示通知框
+        //通知
+        //Icon 0代表警告 1代表成功 2代表错误 5哭脸 6 笑脸
+        function notify(message, icons) {
+            layer.msg(message, {
+                icon: icons,
+                time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                offset: 't',
+                skin: 'layui-layer-lan'
+            });
+        }
+    </script>
+}
+@section body{
+    @(
+ F.Form()
+            .BodyPadding(10)
+            .AutoScroll(true)
+            .ShowHeader(false)
+            .ShowBorder(false)
+            .ID("AddForm")
+            .IsViewPort(true)
+            .Toolbars(
+                F.Toolbar()
+                    .Items(
+                        F.Button()
+                            .Icon(Icon.SystemClose)
+                            .Text("关闭")
+                            .ID("btnHide")
+                            .Listener("click", "F.activeWindow.hide();"),
+                        F.ToolbarSeparator(),
+                        F.Button()
+                            .OnClick(Url.Action("Add_btnSaveClose_Click"), "AddForm")
+                            .Icon(Icon.SystemSave)
+                            .Text("保存")
+                            .ID("btnSaveClose")
+                    )
+            )
+            .Rows(
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .Required(true)
+                            .AutoSelectFirstItem(false)
+                            .EmptyText("请选择校区...")
+                            .Label("校区")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .DataSource(@Model.Campus_ddlList)
+                            .OnSelectedIndexChanged(Url.Action("ddlSSXQ_Add_SelectedIndexChanged"),"SSXQ")
+                            .ID("SSXQ"),
+                        F.DropDownList()
+                            .Enabled(false)
+                            .AutoSelectFirstItem(false)
+                            .Required(true)
+                            .EmptyText("请选择园区...")
+                            .Label("园区")
+                            .OnSelectedIndexChanged(Url.Action("ddlSSYQ_Add_SelectedIndexChanged"),"SSYQ")
+                            .ID("SSYQ")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .Enabled(false)
+                            .AutoSelectFirstItem(false)
+                            .Required(true)
+                            .EmptyText("请选择楼栋...")
+                            .Label("楼栋")
+                            .ID("SSLD"),
+                        F.NumberBox()
+                            .Required(true)
+                            .EmptyText("请选择楼层...")
+                            .NoDecimal(true)
+                            .NoNegative(true)
+                            .MaxValue(10)
+                            .MinValue(1)
+                            .Label("楼层")
+                            .ID("SSLC")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.TextBox()
+                            .Text("")
+                            .Required(true)
+                            .EmptyText("请填写房间号...")
+                            .Label("房间号")
+                            .MaxLength(3)
+                            .MinLength(3)
+                            .MaxLengthMessage("宿舍号为三位数字！")
+                            .MinLengthMessage("宿舍号为三位数字！")
+                            .ID("FJH"),
+                        F.DropDownList()
+                            .AutoSelectFirstItem(false)
+                            .Required(true)
+                            .Label("宿舍类型")
+                            .EmptyText("请选择宿舍类型...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .DataSource(@Model.SSLX_ddlList)
+                            .ID("SSLX")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.NumberBox()
+                            .Increment(50)
+                            .Required(true)
+                            .NoDecimal(true)
+                            .EmptyText("请填写住宿费用...")
+                            .NoNegative(true)
+                            .Label("住宿费用")
+                            .ID("SSFY"),
+                        F.NumberBox()
+                            .Text("")
+                            .Increment(1)
+                            .Required(true)
+                            .NoDecimal(true)
+                            .EmptyText("请填写床位数...")
+                            .NoNegative(true)
+                            .MaxValue(10)
+                            .MinValue(1)
+                            .Label("床位数")
+                            .ID("CWS")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.DropDownList()
+                            .AutoSelectFirstItem(false)
+                            .Required(true)
+                            .Label("面向学生性别")
+                            .EmptyText("请选择学生性别...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .DataSource(@Model.MXXSXB_ddlList)
+                            .ID("MXXSXB"),
+                        F.DropDownList()
+                            .AutoSelectFirstItem(false)
+                            .Required(true)
+                            .Label("面向学生层次")
+                            .EmptyText("请选择学生...")
+                            .DataTextField("text")
+                            .DataValueField("value")
+                            .DataSource(@Model.MXXSCC_ddlList)
+                            .ID("MXXSCC")
+                    ),
+                F.FormRow()
+                    .Items(
+                        F.TextArea()
+                            .Required(false)
+                            .Label("备注")
+                            .EmptyText("备注内容，不超过500字...")
+                            .MaxLength(500)
+                            .ID("Remark")
+                    )
+            )
+    )
+}
