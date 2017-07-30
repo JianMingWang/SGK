@@ -17,6 +17,7 @@ namespace SGK.Areas.JC.Controllers
 
     public class DormController : BaseController
     {
+        private JC_Info JC_Data;
 
         #region Index
 
@@ -235,7 +236,7 @@ namespace SGK.Areas.JC.Controllers
         #region 导入excel
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetExcel(HttpPostedFileBase fileExcel, FormCollection values)
+        public ActionResult fileExcel_FileSelected(HttpPostedFileBase fileExcel, FormCollection values)
         {
             if (fileExcel != null)
             {
@@ -252,16 +253,44 @@ namespace SGK.Areas.JC.Controllers
                     DataTable dt = FileAction.ExcelToDataTable(strPath, null, true);
                     if (dt.Rows.Count > 0)
                     {
+                        JC_Data = new JC_Info();
+                        var campus = from c in db.T_Campus where (1 == 1) orderby c.ID select c;
+                        if (campus.Any())
+                        {
+                            foreach (T_Campus item in campus)
+                            {
+                                JC_Data.Campus.Add(item.Name, item.ID);
+                            }
+                        }
+                        var region = from c in db.T_Region where (1 == 1) orderby c.ID select c;
+                        if (region.Any())
+                        {
+                            foreach (T_Region item in region)
+                            {
+                                JC_Data.Region.Add(item.Name, item.ID);
+                            }
+                        }
+                        var building = from c in db.T_Building where (1 == 1) orderby c.ID select c;
+                        if (building.Any())
+                        {
+                            foreach (T_Building item in building)
+                            {
+                                JC_Data.Building.Add(item.Name, item.ID);
+                            }
+                        }
+
+
                         foreach (DataRow row in dt.Rows)
                         {
-                            string id = "";
                             T_Dorm dorm = null;
+
+                            string id = "";
                             string campusid = getCampusID(row[0].ToString());
                             string regionid = getRegionID(row[1].ToString());
                             string buildingid = getBuildingID(row[2].ToString());
                             string ceil = String.Format("{0:d2}", Convert.ToInt16(row[3]));
                             string num = String.Format("{0:d4}", Convert.ToInt16(row[4]));
-                            if (buildingid != "" && regionid != "" && campusid != "")
+                            if (buildingid != "" && regionid != "" && campusid != "" && ceil == num.Substring(0, 2))
                             {
                                 id = buildingid + ceil + num;
                                 dorm = db.T_Dorm.Find(id);
@@ -291,7 +320,9 @@ namespace SGK.Areas.JC.Controllers
                 }
                 else
                 {
-                    ShowNotify("文件格式错误，请选择Excel文件");
+                    //ShowNotify("文件格式错误，请选择Excel文件");
+                    //使用layer框架 提示框
+                    PageContext.RegisterStartupScript("notify('文件格式错误，请选择Excel文件！', 0)");
                 }
             }
             return UIHelper.Result();
@@ -300,30 +331,27 @@ namespace SGK.Areas.JC.Controllers
         private string getBuildingID(string name)
         {
             string id = "";
-            var building = from b in db.T_Building where b.Name == name select b;
-            if (building.Any())
+            if (JC_Data.Building["name"] != null)
             {
-                id = building.First().ID;
+                id = JC_Data.Building["name"];
             }
             return id;
         }
         private string getRegionID(string name)
         {
             string id = "";
-            var region = from r in db.T_Region where r.Name == name select r;
-            if (region.Any())
+            if (JC_Data.Region["name"] != null)
             {
-                id = region.First().ID;
+                id = JC_Data.Region["name"];
             }
             return id;
         }
         private string getCampusID(string name)
         {
             string id = "";
-            var campus = from c in db.T_Campus where c.Name == name select c;
-            if (campus.Any())
+            if (JC_Data.Campus["name"] != null)
             {
-                id = campus.First().ID;
+                id = JC_Data.Campus["name"];
             }
             return id;
         }
@@ -678,6 +706,26 @@ namespace SGK.Areas.JC.Controllers
             return UIHelper.Result();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult btnDelete_Click(JArray selectedRowsID)
+        {
+            foreach (var item in selectedRowsID)
+            {
+                T_Dorm dorm = db.T_Dorm.Find(item.ToString());
+                db.T_Dorm.Remove(dorm);
+            }
+            try
+            {
+                //db.SaveChanges();
+                PageContext.RegisterStartupScript("DeleteSuccess();");
+            }
+            catch
+            {
+                PageContext.RegisterStartupScript("notify('删除失败！','0')");
+            }
+            return UIHelper.Result();
+        }
         #endregion
 
         public ActionResult GridRefreshPostBack(string gridName, JArray gridFields, JObject typeParams)

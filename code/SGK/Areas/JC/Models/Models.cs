@@ -112,4 +112,11 @@ namespace SGK.Areas.JC.Models
             this.MXXSXB_ddlList.Add(new ddlModel("1", "女"));
         }
     }
+
+    public class JC_Info
+    {
+        public Dictionary<string, string> Campus { get; set; }
+        public Dictionary<string, string> Region { get; set; }
+        public Dictionary<string, string> Building { get; set; }
+    }
 }

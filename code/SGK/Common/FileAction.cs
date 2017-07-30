@@ -231,6 +231,5 @@ namespace SGK.Common
                 return null;
             }
         }
-
     }
 }

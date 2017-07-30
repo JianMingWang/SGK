@@ -206,4 +206,5 @@ C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\Newtonsoft.Json.xml
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\EntityFramework.resources.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.pdb
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\ICSharpCode.SharpZipLib.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.csprojResolveAssemblyReference.cache
