@@ -11,6 +11,11 @@ using System.Web.Mvc;
 using SGK.Controllers;
 using SGK.Areas.JC.Models;
 using Newtonsoft.Json.Linq;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.HSSF.Util;
+using System.IO;
 
 namespace SGK.Areas.JC.Controllers
 {
@@ -234,6 +239,7 @@ namespace SGK.Areas.JC.Controllers
         #endregion
 
         #region 导入excel
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult fileExcel_FileSelected(HttpPostedFileBase fileExcel, FormCollection values)
@@ -253,6 +259,17 @@ namespace SGK.Areas.JC.Controllers
                     DataTable dt = FileAction.ExcelToDataTable(strPath, null, true);
                     if (dt.Rows.Count > 0)
                     {
+                        DataTable errorDorm = new DataTable();
+                        errorDorm.Columns.Add("Campus", typeof(string));
+                        errorDorm.Columns.Add("Region", typeof(string));
+                        errorDorm.Columns.Add("SSLD", typeof(string));
+                        errorDorm.Columns.Add("SSLC", typeof(string));
+                        errorDorm.Columns.Add("FJH", typeof(string));
+                        errorDorm.Columns.Add("SSLX", typeof(string));
+                        errorDorm.Columns.Add("ZSFY", typeof(string));
+                        errorDorm.Columns.Add("CWS", typeof(string));
+                        errorDorm.Columns.Add("ErrorMessage", typeof(string));
+
                         JC_Data = new JC_Info();
                         var campus = from c in db.T_Campus where (1 == 1) orderby c.ID select c;
                         if (campus.Any())
@@ -290,13 +307,24 @@ namespace SGK.Areas.JC.Controllers
                             string buildingid = getBuildingID(row[2].ToString());
                             string ceil = String.Format("{0:d2}", Convert.ToInt16(row[3]));
                             string num = String.Format("{0:d4}", Convert.ToInt16(row[4]));
-                            if (buildingid != "" && regionid != "" && campusid != "" && ceil == num.Substring(0, 2))
+                            if (buildingid != "" && regionid != "" && campusid != "" && ceil != "" && num != "" && ceil == num.Substring(0, 2))
                             {
                                 id = buildingid + ceil + num;
                                 dorm = db.T_Dorm.Find(id);
                                 if (dorm != null)
                                 {
                                     //已存在
+                                    DataRow errorRow = errorDorm.NewRow();
+                                    errorRow["Campus"] = row[0].ToString();
+                                    errorRow["Region"] = row[1].ToString();
+                                    errorRow["SSLD"] = row[2].ToString();
+                                    errorRow["SSLC"] = row[3].ToString();
+                                    errorRow["FJH"] = row[4].ToString();
+                                    errorRow["SSLX"] = row[5].ToString();
+                                    errorRow["ZSFY"] = row[6].ToString();
+                                    errorRow["CWS"] = row[7].ToString();
+                                    errorRow["ErrorMessage"] = "宿舍信息已存在，请重新检查";
+                                    errorDorm.Rows.Add(errorRow);
                                 }
                                 else
                                 {
@@ -313,9 +341,52 @@ namespace SGK.Areas.JC.Controllers
                             }
                             else if (regionid != "" && campusid != "")
                             {
-
+                                DataRow errorRow = errorDorm.NewRow();
+                                errorRow["Campus"] = row[0].ToString();
+                                errorRow["Region"] = row[1].ToString();
+                                errorRow["SSLD"] = row[2].ToString();
+                                errorRow["SSLC"] = row[3].ToString();
+                                errorRow["FJH"] = row[4].ToString();
+                                errorRow["SSLX"] = row[5].ToString();
+                                errorRow["ZSFY"] = row[6].ToString();
+                                errorRow["CWS"] = row[7].ToString();
+                                errorRow["ErrorMessage"] = "宿舍信息有误，请重新检查";
+                                errorDorm.Rows.Add(errorRow);
                             }
                         }
+
+                        if (errorDorm.Rows.Count != 0)
+                        {
+                            string jsonString = SGK.Common.JsonConvert.DataTaleToJsonString(errorDorm);
+
+                            JArray fields = new JArray();
+                            fields.Add("Campus");
+                            fields.Add("Region");
+                            fields.Add("SSLD");
+                            fields.Add("SSLC");
+                            fields.Add("FJH");
+                            fields.Add("SSLX");
+                            fields.Add("ZSFY");
+                            fields.Add("CWS");
+                            fields.Add("ErrorMessage");
+                            //存在错误项 跳转弹出错误界面
+                            ViewBag.ErrorDormList = errorDorm;
+                            UIHelper.Grid("gridErrorDorm").Hidden(false);
+                            UIHelper.Grid("gridErrorDorm").DataSource(errorDorm, fields);
+                            UIHelper.Grid("gridDorm").Hidden(true);
+
+                            UIHelper.TextBox("hiddenText").Text(jsonString);
+                        }
+                        else
+                        {
+                            //不存在错误项，全部保存成功 刷新界面grid
+
+                        }
+                    }
+                    else
+                    {
+                        //表格中不存在记录
+                        PageContext.RegisterStartupScript("notify('表格内容为空！', 0)");
                     }
                 }
                 else
@@ -328,30 +399,235 @@ namespace SGK.Areas.JC.Controllers
             return UIHelper.Result();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult btnGridErrorDormClose_Click(SearchModel model)
+        {
+            UIHelper.Grid("gridErrorDorm").Hidden(true);
+            UIHelper.Grid("gridErrorDorm").Reset();
+            UIHelper.Grid("gridDorm").Hidden(false);
+            UIHelper.Grid("gridDorm").Reset();
+            UIHelper.TextBox("hiddenText").Text("");
+            ReBindData_Grid(model);
+            return UIHelper.Result();
+        }
+
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public ActionResult btnDownLoadErrorMessage_Click(string jsonString)//页面使用的window.location.href方法为get方式
+        {
+            DataTable dtSource = SGK.Common.JsonConvert.JsonStringToDataTable(jsonString);
+            if (dtSource.Rows.Count != 0)
+            {
+                //数据转换成功 jsonString字符串转换成DataTable
+                return ToExcel(dtSource, "宿舍表错误信息", "错误信息导出（合计：" + dtSource.Rows.Count + "）");
+            }
+            else
+            {
+                //数据转换失败 jsonString字符串转换存在问题
+                PageContext.RegisterStartupScript("notify('导出失败！', 0)");
+                return UIHelper.Result();
+            }
+        }
+
+        private ActionResult ToExcel(DataTable dt, string className, string title)
+        {
+            //文件名称   必须包含 .xls
+            string fileName = className + ".xls";
+
+            //创建工作簿、工作表
+            HSSFWorkbook newExcel = new HSSFWorkbook();
+            HSSFSheet sheet = (HSSFSheet)newExcel.CreateSheet("离校去向表");
+            setSheet(newExcel, sheet, dt, title);
+
+            //输出
+            MemoryStream ms = new MemoryStream();
+            newExcel.Write(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return File(ms, "application/vnd.ms-excel", fileName);
+        }
+
+        /// <summary>
+        /// 设置Excel 工作表
+        /// </summary>
+        /// <param name="newExcel">Excel工作簿实例</param>
+        /// <param name="sheet">需进行操作的Excel工作表实例</param>
+        /// <param name="dt">数据源</param>
+        /// <param name="title">需要操作的Excel工作表标题</param>
+        private void setSheet(HSSFWorkbook newExcel, HSSFSheet sheet, DataTable dt, string title)
+        {
+            #region 设置行宽，列高
+            sheet.SetColumnWidth(0, 30 * 256);
+            sheet.SetColumnWidth(1, 30 * 256);
+            sheet.SetColumnWidth(2, 30 * 256);
+            sheet.SetColumnWidth(3, 30 * 256);
+            sheet.SetColumnWidth(4, 30 * 256);
+            sheet.SetColumnWidth(5, 30 * 256);
+            sheet.SetColumnWidth(6, 30 * 256);
+            sheet.SetColumnWidth(7, 30 * 256);
+            sheet.SetColumnWidth(8, 30 * 256);
+            sheet.SetColumnWidth(9, 30 * 256);
+            sheet.DefaultRowHeight = 15 * 20;
+            #endregion
+
+            #region 设置字体
+            HSSFFont font_title = (HSSFFont)newExcel.CreateFont();
+            font_title.FontHeightInPoints = 14;
+
+            HSSFFont font_name = (HSSFFont)newExcel.CreateFont();
+            font_name.FontHeightInPoints = 9;
+            font_name.IsBold = true;
+
+            HSSFFont font_data = (HSSFFont)newExcel.CreateFont();
+            font_data.FontHeightInPoints = 9;
+            #endregion
+
+            #region 设置样式
+            //1、标题的样式
+            HSSFCellStyle style_title = (HSSFCellStyle)newExcel.CreateCellStyle();
+            style_title.Alignment = HorizontalAlignment.Center;
+            style_title.VerticalAlignment = VerticalAlignment.Center;
+            style_title.SetFont(font_title);
+
+            //2、字段名的样式
+            HSSFCellStyle style_name = (HSSFCellStyle)newExcel.CreateCellStyle();
+            style_name.Alignment = HorizontalAlignment.Center;
+            style_name.VerticalAlignment = VerticalAlignment.Center;
+            style_name.SetFont(font_name);
+            style_name.BorderTop = BorderStyle.Thin;
+            style_name.BorderBottom = BorderStyle.Thin;
+            style_name.BorderLeft = BorderStyle.Thin;
+            style_name.BorderRight = BorderStyle.Thin;
+
+            //3、批次的样式 加粗样式
+            HSSFCellStyle style_batch = (HSSFCellStyle)newExcel.CreateCellStyle();
+            style_batch.Alignment = HorizontalAlignment.Center;
+            style_batch.VerticalAlignment = VerticalAlignment.Center;
+            style_batch.FillPattern = FillPattern.SolidForeground;
+            style_batch.FillForegroundColor = HSSFColor.Grey40Percent.Index;
+            style_batch.SetFont(font_data);
+            style_batch.BorderTop = BorderStyle.Thin;
+            style_batch.BorderBottom = BorderStyle.Thin;
+            style_batch.BorderLeft = BorderStyle.Thin;
+            style_batch.BorderRight = BorderStyle.Thin;
+
+            //4、数据的样式
+            HSSFCellStyle style_data = (HSSFCellStyle)newExcel.CreateCellStyle();
+            style_data.Alignment = HorizontalAlignment.Center;
+            style_data.VerticalAlignment = VerticalAlignment.Center;
+            style_data.SetFont(font_data);
+            style_data.BorderTop = BorderStyle.Thin;
+            style_data.BorderBottom = BorderStyle.Thin;
+            style_data.BorderLeft = BorderStyle.Thin;
+            style_data.BorderRight = BorderStyle.Thin;
+            #endregion
+
+            #region 设置内容
+            //第一行 标题
+            HSSFRow row_title = (HSSFRow)sheet.CreateRow(0);
+            HSSFCell cell_title = (HSSFCell)row_title.CreateCell(0);
+            cell_title.SetCellValue(title);
+            cell_title.CellStyle = style_title;
+            sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));   //合并单元格(起始行，结束行，起始列，结束列)
+
+            //第二行 字段名 
+            HSSFRow row_name = (HSSFRow)sheet.CreateRow(1);
+
+            HSSFCell cell_name_1 = (HSSFCell)row_name.CreateCell(0);
+            cell_name_1.SetCellValue("序号");
+            cell_name_1.CellStyle = style_name;
+
+            HSSFCell cell_name_2 = (HSSFCell)row_name.CreateCell(1);
+            cell_name_2.SetCellValue("校区");
+            cell_name_2.CellStyle = style_name;
+
+            HSSFCell cell_name_3 = (HSSFCell)row_name.CreateCell(2);
+            cell_name_3.SetCellValue("园区");
+            cell_name_3.CellStyle = style_name;
+
+            HSSFCell cell_name_4 = (HSSFCell)row_name.CreateCell(3);
+            cell_name_4.SetCellValue("楼栋");
+            cell_name_4.CellStyle = style_name;
+
+            HSSFCell cell_name_5 = (HSSFCell)row_name.CreateCell(4);
+            cell_name_5.SetCellValue("楼层");
+            cell_name_5.CellStyle = style_name;
+
+            HSSFCell cell_name_6 = (HSSFCell)row_name.CreateCell(5);
+            cell_name_6.SetCellValue("房间号");
+            cell_name_6.CellStyle = style_name;
+
+            HSSFCell cell_name_7 = (HSSFCell)row_name.CreateCell(6);
+            cell_name_7.SetCellValue("宿舍类型");
+            cell_name_7.CellStyle = style_name;
+
+            HSSFCell cell_name_8 = (HSSFCell)row_name.CreateCell(7);
+            cell_name_8.SetCellValue("住宿费用");
+            cell_name_8.CellStyle = style_name;
+
+            HSSFCell cell_name_9 = (HSSFCell)row_name.CreateCell(8);
+            cell_name_9.SetCellValue("总床位");
+            cell_name_9.CellStyle = style_name;
+
+            HSSFCell cell_name_10 = (HSSFCell)row_name.CreateCell(9);
+            cell_name_10.SetCellValue("错误信息");
+            cell_name_10.CellStyle = style_name;
+
+            //数据
+            int n = 2;//起始行号
+            int i = 1;//起始序号
+            foreach (DataRow _row in dt.Rows)
+            {
+                HSSFRow row = (HSSFRow)sheet.CreateRow(n++);//写入行  
+                row.CreateCell(0).SetCellValue(i++);
+                row.CreateCell(1).SetCellValue(_row[0].ToString());
+                row.CreateCell(2).SetCellValue(_row[1].ToString());
+                row.CreateCell(3).SetCellValue(_row[2].ToString());
+                row.CreateCell(4).SetCellValue(_row[3].ToString());
+                row.CreateCell(5).SetCellValue(_row[4].ToString());
+                row.CreateCell(6).SetCellValue(_row[5].ToString());
+                row.CreateCell(7).SetCellValue(_row[6].ToString());
+                row.CreateCell(8).SetCellValue(_row[7].ToString());
+                row.CreateCell(9).SetCellValue(_row[8].ToString());
+                foreach (ICell cell in row)
+                {
+                    if (cell.ColumnIndex == 0)
+                    {
+                        cell.CellStyle = style_batch;
+                    }
+                    else
+                    {
+                        cell.CellStyle = style_data;
+                    }
+                }
+            }
+            #endregion
+        }
+
         private string getBuildingID(string name)
         {
             string id = "";
-            if (JC_Data.Building["name"] != null)
+            if (JC_Data.Building.ContainsKey(name))
             {
-                id = JC_Data.Building["name"];
+                id = JC_Data.Building[name];
             }
             return id;
         }
         private string getRegionID(string name)
         {
             string id = "";
-            if (JC_Data.Region["name"] != null)
+            if (JC_Data.Region.ContainsKey(name))
             {
-                id = JC_Data.Region["name"];
+                id = JC_Data.Region[name];
             }
             return id;
         }
         private string getCampusID(string name)
         {
             string id = "";
-            if (JC_Data.Campus["name"] != null)
+            if (JC_Data.Campus.ContainsKey(name))
             {
-                id = JC_Data.Campus["name"];
+                id = JC_Data.Campus[name];
             }
             return id;
         }

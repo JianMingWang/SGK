@@ -205,6 +205,7 @@
     <Compile Include="Areas\UserInfo\UserInfoAreaRegistration.cs" />
     <Compile Include="Common\Exchange.cs" />
     <Compile Include="Common\FileAction.cs" />
+    <Compile Include="Common\JsonConvert.cs" />
     <Compile Include="Content\DataTableHelper.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -310,6 +311,14 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap-theme.css" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap-theme.min.css" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap.css" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap.min.css" />
+    <Content Include="res\bootstrap-3.3.7-dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="res\bootstrap-3.3.7-dist\js\bootstrap.js" />
+    <Content Include="res\bootstrap-3.3.7-dist\js\bootstrap.min.js" />
+    <Content Include="res\bootstrap-3.3.7-dist\js\npm.js" />
     <Content Include="res\css\common.css" />
     <Content Include="res\css\index.css" />
     <Content Include="res\images\blank.png" />
@@ -408,6 +417,14 @@
     <Content Include="Areas\JC\Views\Dorm\Modify.cshtml" />
     <Content Include="Areas\JC\Views\Dorm\Add.cshtml" />
     <Content Include="Areas\JC\Views\Dorm\MultiModify.cshtml" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap-theme.css.map" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap-theme.min.css.map" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap.css.map" />
+    <Content Include="res\bootstrap-3.3.7-dist\css\bootstrap.min.css.map" />
+    <Content Include="res\bootstrap-3.3.7-dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="res\bootstrap-3.3.7-dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="res\bootstrap-3.3.7-dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="res\bootstrap-3.3.7-dist\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

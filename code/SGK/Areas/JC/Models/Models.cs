@@ -115,8 +115,8 @@ namespace SGK.Areas.JC.Models
 
     public class JC_Info
     {
-        public Dictionary<string, string> Campus { get; set; }
-        public Dictionary<string, string> Region { get; set; }
-        public Dictionary<string, string> Building { get; set; }
+        public Dictionary<string, string> Campus = new Dictionary<string, string>();
+        public Dictionary<string, string> Region = new Dictionary<string, string>();
+        public Dictionary<string, string> Building = new Dictionary<string, string>();
     }
 }

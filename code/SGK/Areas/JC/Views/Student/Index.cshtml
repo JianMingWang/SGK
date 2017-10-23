@@ -4,8 +4,21 @@
     var F = Html.F();
 }
 
-@section script{
+@section head{
+<style>
+    .f-panel.mypanel {
+        text-align: center;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: solid 1px #ccc;
+    }
 
+        .f-panel.mypanel .mybutton {
+            display: inline-block;
+            *display: inline;
+            margin-right: 10px;
+        }
+</style>
 }
 
 @section body{
@@ -14,185 +27,243 @@
         .ShowBorder(false)
         .ShowHeader(false)
         .IsViewPort(true)
-        .Layout(LayoutType.Fit)
+        .BodyPadding(5)
+        .Layout(LayoutType.Region)
         .Items(
-            F.Grid()
-                .EnableCollapse(false)
-                .Title("学生信息表")
-                .ShowHeader(true)
+            F.Panel()
                 .ShowBorder(true)
-                .ID("gridStudent")
-                .EnableCheckBoxSelect(true)
-                .AllowPaging(true)
-                .PageSize(20)
-                .DataIDField("ID")
-                .DataTextField("Name")
-                .Toolbars(
-                    F.Toolbar()
-                        .ID("toolSearch")
-                        .Items(
-                            F.TextBox()
-                                .ID("tbCollege")
-                                .EmptyText("学院名称")
-                                .Width(100),
-                            F.TextBox()
-                                .ID("tbClass")
-                                .EmptyText("班级")
-                                .Width(100),
-                            F.NumberBox()
-                                .ID("tbYear")
-                                .EmptyText("入学年份")
-                                .Width(80)
-                                .NoDecimal(true)
-                                .ShowTrigger(false),
-                            F.DropDownList()
-                                .ID("ddlSex")
-                                .Width(100)
+                .ShowHeader(true)
+                .EnableCollapse(false)
+                .Title("搜索条件")
+                .TitleAlign(TextAlign.Left)
+                .Width(200)
+                .RegionPosition(Position.Left)
+                .Items(
+                    F.Form()
+                        .ID("formSearch")
+                        .ShowHeader(false)
+                        .ShowBorder(false)
+                        .Margin(5)
+                        .Rows(
+                            F.FormRow()
                                 .Items(
-                                    F.ListItem()
-                                        .Value("all")
-                                        .Text("所有性别"),
-                                    F.ListItem()
-                                        .Value("0")
-                                        .Text("男"),
-                                    F.ListItem()
-                                        .Value("1")
-                                        .Text("女")
-                                ),
-                            F.DropDownList()
-                                .ID("ddlStuStatus")
-                                .Width(120)
+                                    F.Label()
+                                        .Text("姓名：")
+                            ),
+                            F.FormRow()
                                 .Items(
-                                    F.ListItem()
-                                        .Value("all")
-                                        .Text("所有学生状态"),
-                                    F.ListItem()
-                                        .Value("0")
-                                        .Text("在读"),
-                                    F.ListItem()
-                                        .Value("1")
-                                        .Text("休学"),
-                                    F.ListItem()
-                                        .Value("2")
-                                        .Text("退学"),
-                                    F.ListItem()
-                                        .Value("3")
-                                        .Text("转学"),
-                                    F.ListItem()
-                                        .Value("4")
-                                        .Text("延期毕业"),
-                                    F.ListItem()
-                                        .Value("5")
-                                        .Text("毕业"),
-                                    F.ListItem()
-                                        .Value("6")
-                                        .Text("其它")
-                                ),
-                            F.DropDownList()
-                                .ID("ddlStatus")
-                                .Width(120)
+                                    F.TextBox()
+                                        .ID("ST_Name")
+                                        .EmptyText("请输入学生姓名")
+                            ),
+                            F.FormRow()
                                 .Items(
-                                    F.ListItem()
-                                        .Value("all")
-                                        .Text("所有住宿状态"),
-                                    F.ListItem()
-                                        .Value("0")
-                                        .Text("非入住"),
-                                    F.ListItem()
-                                        .Value("1")
-                                        .Text("入住"),
-                                    F.ListItem()
-                                        .Value("2")
-                                        .Text("入住（走读）")
+                                    F.Label()
+                                        .Text("班级：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.TextBox()
+                                        .ID("ST_Class")
+                                        .EmptyText("请输入班级名称")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.Label()
+                                        .Text("学号：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.TextBox()
+                                        .ID("ST_ID")
+                                        .EmptyText("请输入学生学号")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.Label()
+                                        .Text("性别：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.DropDownList()
+                                        .ID("ST_Sex")
+                                        .EmptyText("请选择学生性别")
                                 ),
-                            F.ToolbarSeparator(),
-                            F.Button()
-                                .ID("btnSearch")
-                                .Text("搜索")
-                                .Width(80)
-                        ),
-                    F.Toolbar()
-                        .ID("toolgroup")
-                        .Items(
-                            F.Button()
-                                .ID("btnAdd")
-                                .Text("新增"),
-                            F.ToolbarSeparator()
-                                .MarginLeft(10)
-                                .MarginRight(10),
-                            F.Button()
-                                .ID("btnDelList")
-                                .Text("删除")
+                            F.FormRow()
+                                .Items(
+                                    F.Label()
+                                        .Text("学院：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.DropDownList()
+                                        .ID("College")
+                                        .EmptyText("请选择学院")
+                                ),
+                            F.FormRow()
+                                .Items(
+                                    F.Label()
+                                        .Text("学生状态：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.DropDownList()
+                                        .ID("StuStatus")
+                                        .EmptyText("学生状态")
+                                ),
+                            F.FormRow()
+                                .Items(
+                                    F.Label()
+                                        .Text("住宿状态：")
+                            ),
+                            F.FormRow()
+                                .Items(
+                                    F.DropDownList()
+                                        .ID("Status")
+                                        .EmptyText("住宿状态")
+                                ),
+                            F.FormRow()
+                                .Items(
+                                    F.Panel()
+                                        .ID("Panel1")
+                                        .ShowBorder(false)
+                                        .CssClass("mypanel")
+                                        .ShowHeader(false)
+                                        .Items(
+                                            F.Button()
+                                                .Text("搜索")
+                                                .CssClass("mybutton")
+                                                .Width(200)
+                                                .ID("btnSearch")
+                                                .OnClick(Url.Action("btnSearch_Click"), "formSearch"),
+                                            F.Label()
+                                                .Text(""),
+                                            F.Button()
+                                                .ID("btnReset")
+                                                .CssClass("mybutton")
+                                                .Width(200)
+                                                .Text("重置")
+                                                .OnClientClick("F.ui.formSearch.reset();")
+                                    )
+                                )
                         )
+                ),
+            F.Panel()
+                .ShowBorder(true)
+                .ShowHeader(true)
+                .Title("学生信息表")
+                .RegionPosition(Position.Center)
+                .Items(
+                F.Grid()
+                    .EnableCollapse(false)
+                    .Title("学生信息表")
+                    .ShowHeader(false)
+                    .ShowBorder(true)
+                    .Margin(5)
+                    .ID("gridStudent")
+                    .EnableCheckBoxSelect(true)
+                    .IsViewPort(true)
+                    .AllowPaging(true)
+                    .PageSize(20)
+                    .DataIDField("ID")
+                    .DataTextField("Name")
+                    .Toolbars(
+                        F.Toolbar()
+                            .ID("toolgroup")
+                            .Items(
+                                F.Button()
+                                    .ID("btnAdd")
+                                    .Text("新增")
+                                    .Listener("click", "btnAdd_Click();"),
+                                F.ToolbarSeparator()
+                                    .MarginLeft(10)
+                                    .MarginRight(10),
+                                F.Button()
+                                    .ID("btnDelete")
+                                    .Listener("click", "btnDelete_Click();")
+                                    .Text("删除")
+                            )
+                    )
+                    .Columns(
+                        F.RowNumberField()
+                            .TextAlign(TextAlign.Center),
+                        F.RenderField()
+                            .HeaderText("学号")
+                            .DataField("ID")
+                            .TextAlign(TextAlign.Center)
+                            .Width(120),
+                        F.RenderField()
+                            .HeaderText("姓名")
+                            .DataField("Name")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("班级")
+                            .DataField("ClassName")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("学院")
+                            .DataField("College")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("入学年份")
+                            .DataField("Year")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("性别")
+                            .DataField("Sex")
+                            .TextAlign(TextAlign.Center)
+                            .Width(50),
+                        F.RenderField()
+                            .HeaderText("学生状态")
+                            .DataField("StuStatus")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("住宿状态")
+                            .DataField("Status")
+                            .TextAlign(TextAlign.Center)
+                            .Width(80),
+                        F.RenderField()
+                            .HeaderText("宿舍")
+                            .DataField("FJH")
+                            .TextAlign(TextAlign.Center)
+                            .Width(180),
+                        F.RenderField()
+                            .HeaderText("手机号")
+                            .DataField("Tel")
+                            .TextAlign(TextAlign.Center)
+                            .Width(120),
+                        F.RenderField()
+                            .HeaderText("邮箱")
+                            .DataField("Email")
+                            .TextAlign(TextAlign.Center)
+                            .Width(120),
+                        F.RenderField()
+                            .HeaderText("备注")
+                            .DataField("Remark")
+                            .TextAlign(TextAlign.Center)
+                            .ExpandUnusedSpace(true)
+                            .Width(150)
+                    )
+                    .DataSource(ViewBag.gridStudent)
                 )
-                .Columns(
-                    F.RowNumberField()
-                        .TextAlign(TextAlign.Center),
-                    F.RenderField()
-                        .HeaderText("学号")
-                        .DataField("ID")
-                        .TextAlign(TextAlign.Center)
-                        .Width(120),
-                    F.RenderField()
-                        .HeaderText("姓名")
-                        .DataField("Name")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("班级")
-                        .DataField("ClassName")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("学院")
-                        .DataField("College")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("入学年份")
-                        .DataField("Year")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("性别")
-                        .DataField("Sex")
-                        .TextAlign(TextAlign.Center)
-                        .Width(50),
-                    F.RenderField()
-                        .HeaderText("学生状态")
-                        .DataField("StuStatus")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("住宿状态")
-                        .DataField("Status")
-                        .TextAlign(TextAlign.Center)
-                        .Width(80),
-                    F.RenderField()
-                        .HeaderText("宿舍")
-                        .DataField("FJH")
-                        .TextAlign(TextAlign.Center)
-                        .Width(180),
-                    F.RenderField()
-                        .HeaderText("手机号")
-                        .DataField("Tel")
-                        .TextAlign(TextAlign.Center)
-                        .Width(120),
-                    F.RenderField()
-                        .HeaderText("邮箱")
-                        .DataField("Email")
-                        .TextAlign(TextAlign.Center)
-                        .Width(120),
-                    F.RenderField()
-                        .HeaderText("备注")
-                        .DataField("Remark")
-                        .TextAlign(TextAlign.Center)
-                        .Width(150)
-                )
-                .DataSource(ViewBag.gridStudent)
         )
 
-    )
+        )
+}
+@section script{
+    <script>
+        function btnAdd_Click() {
 
+        }
+
+        function btnDelete_Click() {
+
+        }
+    </script>
 }
 

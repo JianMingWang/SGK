@@ -15,11 +15,15 @@
         .IsViewPort(true)
         .Layout(LayoutType.HBox)
         .Items(
-            //F.Panel()
-            //    .Hidden(true)
-            //    .ContentEl("#fileForm"),
+            F.Panel()
+                .Hidden(true)
+                .Items(
+                    F.TextBox()
+                        .ID("hiddenText")
+                        .Hidden(true)
+                ),
             F.Grid()
-                        .EnableCollapse(true)
+                        .EnableCollapse(false)
                         .Title("宿舍信息表")
                         .IsViewPort(true)
                         .BoxFlex(1)
@@ -188,172 +192,253 @@
                                 .ExpandUnusedSpace(true)
                                 .Width(150)
                         )
-                        .DataSource(ViewBag.gridDorm)
-            //F.Tree()
-            //    .ID("treeDorm")
-            //        .Width(200)
-            //        .ShowHeader(true)
-            //        .EnableCollapse(false)
-            //        .Title("宿舍")
-            //        .Toolbars(
-            //            F.Toolbar()
-            //                .Items(
-            //                    F.Button()
-            //                        .ID("btnAdd")
-            //                        .Text("新增"),
-            //                    F.Button()
-            //                        .ID("btnDelete")
-            //                        .Text("删除")
-            //                )
-            //        )
-            //        .Nodes((TreeNode[])ViewBag.treeDorm),
-            //F.Grid()
-            //    .EnableCollapse(true)
-            //    .Title("宿舍信息表")
-            //    .BoxFlex(1)
-            //    .Margin(0)
-            //    .ShowHeader(true)
-            //    .ShowBorder(true)
-            //    .ID("gridDorm")
-            //    .EnableCheckBoxSelect(true)
-            //    .AllowPaging(true)
-            //    .PageSize(20)
-            //    .DataIDField("ID")
-            //    .DataTextField("Name")
-            //    .Toolbars(
-            //        F.Toolbar()
-            //            .ID("btngroup")
-            //            .Items(
-            //                F.Button()
-            //                    .ID("btnAdd")
-            //                    .Text("新增")
-            //                    .Listener("click", "btnAdd();"),
-            //                F.ToolbarSeparator()
-            //                    .MarginLeft(10)
-            //                    .MarginRight(10),
-            //                F.Button()
-            //                    .ID("btnDelList")
-            //                    .Text("删除"),
-            //                F.ToolbarSeparator()
-            //                    .MarginLeft(10)
-            //                    .MarginRight(10),
-            //                F.FileUpload()
-            //                    .ID("fileExcel")
-            //                    .ButtonOnly(true)
-            //                    .ButtonText("导入")
-            //                    .OnFileSelected(Url.Action("getExcel"), "fileExcel"),
-            //                F.Button()
-            //                    .ID("btnDownload")
-            //                    .Text("下载空白模板")
-            //                    .Listener("click","btnDownload();")
-            //            )
-            //    )
-            //    .Columns(
-            //        F.RowNumberField()
-            //            .TextAlign(TextAlign.Center),
-            //        F.RenderField()
-            //            .HeaderText("编号")
-            //            .DataField("DormID")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80)
-            //            .Hidden(true),
-            //        F.RenderField()
-            //            .HeaderText("名称")
-            //            .DataField("FJH")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("位置")
-            //            .DataField("Region")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(130),
-            //        F.RenderField()
-            //            .HeaderText("宿舍类型")
-            //            .DataField("SSLX")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(100),
-            //        F.RenderField()
-            //            .HeaderText("住宿费用")
-            //            .DataField("ZSFY")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("总床位")
-            //            .DataField("CWS")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("可用床位")
-            //            .DataField("KYCWS")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("学生性别")
-            //            .DataField("Sex")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("入住单位")
-            //            .DataField("DeptID")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位1")
-            //            .DataField("Stu_01")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位2")
-            //            .DataField("Stu_02")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位3")
-            //            .DataField("Stu_03")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位4")
-            //            .DataField("Stu_04")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位5")
-            //            .DataField("Stu_05")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位6")
-            //            .DataField("Stu_06")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位7")
-            //            .DataField("Stu_07")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位8")
-            //            .DataField("Stu_08")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位9")
-            //            .DataField("Stu_09")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("床位10")
-            //            .DataField("Stu_10")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(80),
-            //        F.RenderField()
-            //            .HeaderText("备注")
-            //            .DataField("Remark")
-            //            .TextAlign(TextAlign.Center)
-            //            .Width(150)
-            //    )
-            //    .DataSource(ViewBag.gridDorm)
+                        .DataSource(ViewBag.gridDorm),
+         F.Grid()
+            .ID("gridErrorDorm")
+            .Hidden(true)
+            .EnableCollapse(false)
+            .Title("导入宿舍信息表")
+            .IsViewPort(true)
+            .BoxFlex(1)
+            .Margin(10)
+            .ShowHeader(true)
+            .ShowBorder(true)
+            .AllowPaging(true)
+            .PageSize(20)
+            .Toolbars(
+                F.Toolbar()
+                    .Position(ToolbarPosition.Top)
+                    .ToolbarAlign(ToolbarAlign.Left)
+                    .Items(
+                        F.Button()
+                            .ID("btnDownLoadErrorMessage")
+                            .Text("下载错误信息")
+                            .Listener("click", "btnDownLoadErrorMessage_Click();"),
+                        F.ToolbarSeparator()
+                            .MarginLeft(10)
+                            .MarginRight(10),
+                        F.Button()
+                            .ID("btnGridErrorDormClose")
+                            .Text("关闭")
+                            .Listener("click", "btnGridErrorDormClose_Click();")
+                    )
+            )
+            .Columns(
+                F.RowNumberField()
+                    .TextAlign(TextAlign.Center),
+                F.RenderField()
+                    .HeaderText("校区")
+                    .DataField("Campus")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("园区")
+                    .DataField("Region")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("楼栋")
+                    .DataField("SSLD")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("楼层")
+                    .DataField("SSLC")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("房间号")
+                    .DataField("FJH")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("宿舍类型")
+                    .DataField("SSLX")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("住宿费用")
+                    .DataField("ZSFY")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("总床位")
+                    .DataField("CWS")
+                    .TextAlign(TextAlign.Center)
+                    .Width(130),
+                F.RenderField()
+                    .HeaderText("错误信息")
+                    .DataField("ErrorMessage")
+                    .TextAlign(TextAlign.Left)
+                    .HeaderTextAlign(TextAlign.Center)
+                    .ExpandUnusedSpace(true)
+                )
+
+        //F.Tree()
+        //    .ID("treeDorm")
+        //        .Width(200)
+        //        .ShowHeader(true)
+        //        .EnableCollapse(false)
+        //        .Title("宿舍")
+        //        .Toolbars(
+        //            F.Toolbar()
+        //                .Items(
+        //                    F.Button()
+        //                        .ID("btnAdd")
+        //                        .Text("新增"),
+        //                    F.Button()
+        //                        .ID("btnDelete")
+        //                        .Text("删除")
+        //                )
+        //        )
+        //        .Nodes((TreeNode[])ViewBag.treeDorm),
+        //F.Grid()
+        //    .EnableCollapse(true)
+        //    .Title("宿舍信息表")
+        //    .BoxFlex(1)
+        //    .Margin(0)
+        //    .ShowHeader(true)
+        //    .ShowBorder(true)
+        //    .ID("gridDorm")
+        //    .EnableCheckBoxSelect(true)
+        //    .AllowPaging(true)
+        //    .PageSize(20)
+        //    .DataIDField("ID")
+        //    .DataTextField("Name")
+        //    .Toolbars(
+        //        F.Toolbar()
+        //            .ID("btngroup")
+        //            .Items(
+        //                F.Button()
+        //                    .ID("btnAdd")
+        //                    .Text("新增")
+        //                    .Listener("click", "btnAdd();"),
+        //                F.ToolbarSeparator()
+        //                    .MarginLeft(10)
+        //                    .MarginRight(10),
+        //                F.Button()
+        //                    .ID("btnDelList")
+        //                    .Text("删除"),
+        //                F.ToolbarSeparator()
+        //                    .MarginLeft(10)
+        //                    .MarginRight(10),
+        //                F.FileUpload()
+        //                    .ID("fileExcel")
+        //                    .ButtonOnly(true)
+        //                    .ButtonText("导入")
+        //                    .OnFileSelected(Url.Action("getExcel"), "fileExcel"),
+        //                F.Button()
+        //                    .ID("btnDownload")
+        //                    .Text("下载空白模板")
+        //                    .Listener("click","btnDownload();")
+        //            )
+        //    )
+        //    .Columns(
+        //        F.RowNumberField()
+        //            .TextAlign(TextAlign.Center),
+        //        F.RenderField()
+        //            .HeaderText("编号")
+        //            .DataField("DormID")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80)
+        //            .Hidden(true),
+        //        F.RenderField()
+        //            .HeaderText("名称")
+        //            .DataField("FJH")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("位置")
+        //            .DataField("Region")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(130),
+        //        F.RenderField()
+        //            .HeaderText("宿舍类型")
+        //            .DataField("SSLX")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(100),
+        //        F.RenderField()
+        //            .HeaderText("住宿费用")
+        //            .DataField("ZSFY")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("总床位")
+        //            .DataField("CWS")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("可用床位")
+        //            .DataField("KYCWS")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("学生性别")
+        //            .DataField("Sex")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("入住单位")
+        //            .DataField("DeptID")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位1")
+        //            .DataField("Stu_01")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位2")
+        //            .DataField("Stu_02")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位3")
+        //            .DataField("Stu_03")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位4")
+        //            .DataField("Stu_04")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位5")
+        //            .DataField("Stu_05")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位6")
+        //            .DataField("Stu_06")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位7")
+        //            .DataField("Stu_07")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位8")
+        //            .DataField("Stu_08")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位9")
+        //            .DataField("Stu_09")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("床位10")
+        //            .DataField("Stu_10")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(80),
+        //        F.RenderField()
+        //            .HeaderText("备注")
+        //            .DataField("Remark")
+        //            .TextAlign(TextAlign.Center)
+        //            .Width(150)
+        //    )
+        //    .DataSource(ViewBag.gridDorm)
         )
     )
 
@@ -562,6 +647,27 @@
 
             notify("删除成功！", 1);
             F.doPostBack('@Url.Action("ReBindData_Grid")', {
+                FJH: '',
+                SSYQ: '',
+                SSLD: '',
+                gridField: gridField
+            });
+        }
+
+        function btnDownLoadErrorMessage_Click() {
+            var jsonString = F.ui.hiddenText.getText();
+            console.log(jsonString);
+            //此种方法不能下载Excel
+            @*F.doPostBack('@Url.Action("btnDownLoadErrorMessage_Click")', {
+                jsonString: jsonString
+            });*@
+            window.location.href = '@Url.Action("btnDownLoadErrorMessage_Click")?jsonString=' + jsonString;
+        }
+
+        function btnGridErrorDormClose_Click() {
+            var gridField = F.ui.gridDorm.fields;
+
+            F.doPostBack('@Url.Action("btnGridErrorDormClose_Click")', {
                 FJH: '',
                 SSYQ: '',
                 SSLD: '',

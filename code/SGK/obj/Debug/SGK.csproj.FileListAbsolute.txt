@@ -159,6 +159,7 @@ C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\SGK.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\SGK.pdb
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\EntityFramework.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\EntityFramework.SqlServer.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\ICSharpCode.SharpZipLib.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\Microsoft.CSharp.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\Microsoft.Owin.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\Microsoft.Web.Infrastructure.dll
@@ -204,7 +205,12 @@ C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\System.Web.WebPages.Deployment.x
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\System.Web.WebPages.Razor.xml
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\Newtonsoft.Json.xml
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\EntityFramework.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.Helpers.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.Mvc.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.Razor.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.WebPages.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
+C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.pdb
-C:\Users\Wong Jianming\Desktop\SGK\code\SGK\bin\ICSharpCode.SharpZipLib.dll
 C:\Users\Wong Jianming\Desktop\SGK\code\SGK\obj\Debug\SGK.csprojResolveAssemblyReference.cache
